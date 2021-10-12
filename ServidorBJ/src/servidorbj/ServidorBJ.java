@@ -90,6 +90,7 @@ public class ServidorBJ implements Runnable{
 		
 		manoJugador1 = new ArrayList<Carta>();
 		manoJugador2 = new ArrayList<Carta>();
+		manoJugador3 = new ArrayList<Carta>();
 		manoDealer = new ArrayList<Carta>();
 		
 		//reparto inicial jugadores 1 y 2
@@ -113,6 +114,7 @@ public class ServidorBJ implements Runnable{
 		manosJugadores = new ArrayList<ArrayList<Carta>>(3);
 		manosJugadores.add(manoJugador1);
 		manosJugadores.add(manoJugador2);
+		manosJugadores.add(manoJugador3);
 		manosJugadores.add(manoDealer);
 	}
 
