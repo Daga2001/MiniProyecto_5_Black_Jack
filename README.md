@@ -58,3 +58,4 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 ## Update 1.1
 - Se cambió la longitud de cola a 3
 - Se creó la nueva mano del jugador 3 (ArrayList)
+- Se aumentó el tamaño de los jugadores (String and int arrays)
