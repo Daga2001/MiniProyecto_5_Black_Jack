@@ -28,7 +28,7 @@ public class ServidorBJ implements Runnable{
 	//constantes para manejo de la conexion.
 	public static final int PUERTO=7377;
 	public static final String IP="127.0.0.1";
-	public static final int LONGITUD_COLA=2;
+	public static final int LONGITUD_COLA=3;
 
 	// variables para funcionar como servidor
 	private ServerSocket server;
@@ -48,6 +48,7 @@ public class ServidorBJ implements Runnable{
 	private ArrayList<ArrayList<Carta>> manosJugadores;
 	private ArrayList<Carta> manoJugador1;
 	private ArrayList<Carta> manoJugador2;
+	private ArrayList<Carta> manoJugador3;
 	private ArrayList<Carta> manoDealer;
 	private int[] valorManos;
 	private DatosBlackJack datosEnviar;
