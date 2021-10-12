@@ -82,8 +82,8 @@ public class ServidorBJ implements Runnable{
 		// TODO Auto-generated method stub
     	 //Variables de control del juego.
 		
-		idJugadores = new String[2];
-		valorManos = new int[3];
+		idJugadores = new String[LONGITUD_COLA];
+		valorManos = new int[LONGITUD_COLA+1];
 		
 		mazo = new Baraja();
 		Carta carta;
