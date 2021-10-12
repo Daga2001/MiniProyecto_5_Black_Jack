@@ -24,18 +24,18 @@ Finalmente, se deberá poder reiniciar una nueva ronda de juego.
 
 ## Rules (Spanish)
 
-- El servidor debe gestionar tres jugadores (clientes) que juegan Black Jack contra el dealer.
+- **El servidor debe gestionar tres jugadores (clientes) que juegan Black Jack contra el dealer. (Falta)**
 - El juego inicia cuando todos jugadores (clientes) están conectados al servidor.
-- Al conectarse cada jugador (cliente) suministra su identificador y un valor de apuesta al servidor.
+- **Al conectarse cada jugador (cliente) suministra su identificador y un valor de apuesta al servidor. (Falta)**
 - El servidor controlará que cada jugador solo juegue cuando le corresponde su turno e irá rotando el turno entre jugadores.
 - El turno será según el orden de conexión, es decir, el primero en llegar tendrá el primer turno, y el último en llegar tendrá el último turno.
-- Cada jugador (cliente) deberá visualizar de manera gráfica, la mesa de juego, la cual incluye, sus cartas, las cartas de los otros jugadores (incluido el dealer) y los mensajes con el estado del juego.
+- **Cada jugador (cliente) deberá visualizar de manera gráfica, la mesa de juego, la cual incluye, sus cartas, las cartas de los otros jugadores (incluido el dealer) y los mensajes con el estado del juego. (Falta)**
 - El servidor no tendrá Interfaz gráfica.
 
 El dealer será emulado por el servidor (es decir, no es un jugador conectado) y responde a la siguiente regla:
 
-- Con 16 o menos debe pedir carta
-- Con 17 o mas planta.
+- **Con 16 o menos debe pedir cartac (Verificar)**
+- **Con 17 o mas planta. (Verificar)**
 
 ## Requirements (Spanish)
 
