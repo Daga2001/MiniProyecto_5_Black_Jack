@@ -400,7 +400,8 @@ public class ServidorBJ implements Runnable{
 				datosEnviar = new DatosBlackJack();
 				datosEnviar.setManoDealer(manosJugadores.get(2));
 				datosEnviar.setManoJugador1(manosJugadores.get(0));
-				datosEnviar.setManoJugador2(manosJugadores.get(1));		
+				datosEnviar.setManoJugador2(manosJugadores.get(1));
+				datosEnviar.setManoJugador3(manosJugadores.get(2));
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
@@ -483,7 +484,7 @@ public class ServidorBJ implements Runnable{
         while(pedir) {
 		  	Carta carta = mazo.getCarta();
 			//adicionar la carta a la mano del dealer
-			manosJugadores.get(2).add(carta);
+			manosJugadores.get(LONGITUD_COLA+1).add(carta);
 			calcularValorMano(carta, 2);
 			
 			mostrarMensaje("El dealer recibe "+carta.toString()+" suma "+ valorManos[2]);
