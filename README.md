@@ -54,3 +54,7 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 
 - **Note:** Para este proyecto no se debe generar ningún diagrama.
+
+## Update 1.1
+- Se cambió la longitud de cola a 3
+- Se creó la nueva mano del jugador 3 (ArrayList)

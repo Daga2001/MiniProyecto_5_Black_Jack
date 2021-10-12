@@ -100,6 +100,9 @@ public class ServidorBJ implements Runnable{
 		  carta = mazo.getCarta();
 		  manoJugador2.add(carta);
 		  calcularValorMano(carta,1);
+		  carta = mazo.getCarta();
+		  manoJugador3.add(carta);
+		  calcularValorMano(carta,2);
 		}
 		//Carta inicial Dealer
 		carta = mazo.getCarta();
