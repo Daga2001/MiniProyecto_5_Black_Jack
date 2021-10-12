@@ -111,7 +111,7 @@ public class ServidorBJ implements Runnable{
 		calcularValorMano(carta,2);
 		
 		//gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
-		manosJugadores = new ArrayList<ArrayList<Carta>>(3);
+		manosJugadores = new ArrayList<ArrayList<Carta>>(LONGITUD_COLA+1);
 		manosJugadores.add(manoJugador1);
 		manosJugadores.add(manoJugador2);
 		manosJugadores.add(manoJugador3);
