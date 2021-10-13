@@ -56,7 +56,6 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 - **Note:** Para este proyecto no se debe generar ningún diagrama.
 
 ## Update 1.1
-- Se cambió la longitud de cola a 3
-- Se creó la nueva mano del jugador 3 (ArrayList)
-- Se aumentó el tamaño de los jugadores (String and int arrays)
-- Se añade el reparto de cartas para el jugador 3
+
+Se implementa el juego con tres jugadores, lo cual quedaria con cuatro, contando el dealer (Se añadió un tercer cliente).
+Se añadio un tercer panel para el jugador 3, quedando 5 paneles a la vista de cada jugador, uno por cada jugador, y los otros dos para el dealer y los mensajes.
