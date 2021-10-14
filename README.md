@@ -59,3 +59,7 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 Se implementa el juego con tres jugadores, lo cual quedaria con cuatro, contando el dealer (Se añadió un tercer cliente).
 Se añadio un tercer panel para el jugador 3, quedando 5 paneles a la vista de cada jugador, uno por cada jugador, y los otros dos para el dealer y los mensajes.
+
+## Update 1.2
+
+Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sino imagenes.
