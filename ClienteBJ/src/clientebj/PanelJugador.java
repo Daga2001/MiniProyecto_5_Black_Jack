@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -23,21 +24,23 @@ public class PanelJugador extends JPanel {
 	//variables para control del graficado
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
+	private ImageIcon image;
 	    
-	public PanelJugador(String nombreJugador) {
+	public PanelJugador(String datosJugador) {
 		//this.setBackground(Color.GREEN);
 		dibujoRecordar = new ArrayList<Recuerdo>();
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
-		bordes = BorderFactory.createTitledBorder(nombreJugador);
+		bordes = BorderFactory.createTitledBorder(datosJugador);
 		this.setBorder(bordes);
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
 		x=5;
 	    for(int i=0;i<manoJugador.size();i++) {
-	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
-	    	x+=27;
+	    	Recuerdo recuerdo = new Recuerdo(manoJugador.get(i),x);
+	    	dibujoRecordar.add(recuerdo);
+	    	x+=15;
 	    }			
 	    repaint();
 	}
@@ -55,7 +58,14 @@ public class PanelJugador extends JPanel {
 				
 		//pinta la mano inicial
 		for(int i=0;i<dibujoRecordar.size();i++) {
-			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
+			String card = dibujoRecordar.get(i).getCartaRecordar();
+			int x = dibujoRecordar.get(i).getxRecordar();
+			int y = 17;
+			int sizeX = 55;
+			int sizeY = 65;
+			image = new ImageIcon(this.getClass().getClassLoader().getResource(String.format("%s.png", card)));
+			image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
+			g.drawImage(image.getImage(), x , y, image.getImageObserver());
 		}	
 	}
 	
