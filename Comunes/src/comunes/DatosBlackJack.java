@@ -12,6 +12,7 @@ public class DatosBlackJack implements Serializable{
 	private Carta carta;
 	private String mensaje;
 	private String jugador,jugadorEstado;
+	private volatile boolean reiniciar;
 	
 	public String getJugador() {
 		return jugador;
@@ -94,6 +95,7 @@ public class DatosBlackJack implements Serializable{
 	public Carta getCarta() {
 		return carta;
 	}
+	
 	public boolean isNumber(String text) {
 		if(text == null || text.length() == 0) {
 			return false;
@@ -107,4 +109,13 @@ public class DatosBlackJack implements Serializable{
 		}
 		return true;
 	}
+	
+	public void setReiniciar(boolean reiniciar) {
+		this.reiniciar=reiniciar;
+	}
+	
+	public boolean getReiniciar() {
+		return reiniciar;
+	}
+	
 }

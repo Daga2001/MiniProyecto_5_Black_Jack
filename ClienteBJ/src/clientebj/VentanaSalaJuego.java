@@ -65,12 +65,12 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 		private void initGUI() {
 			// TODO Auto-generated method stub
-			//set up JFrame Container y Layout
-	        
-			//Create Listeners objects
+			// set up JFrame Container y Layout
+
+			// Create Listeners objects
 			escucha = new Escucha();
-			//Create Control objects
-			
+			// Create Control objects
+
 			PanelWithImage panel = new PanelWithImage();
 			panel.setLayout(new BorderLayout());
 			
@@ -222,10 +222,52 @@ public class VentanaSalaJuego extends JInternalFrame {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");
 		}
 		
+		public void pintarCartasReinicio(DatosBlackJack datosRecibidos) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {
+						yo.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+						jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+					}else {
+						yo.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+						jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+					}
+					dealer.pintarCartasReinicio(datosRecibidos.getManoDealer());
+					
+				}
+			});
+			
+		}
+		
+		public void limpiar() {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					yo.limpiar();
+					jugador2.limpiar();
+					dealer.limpiar();
+				}
+				
+			});
+		}
+		
 		public void pintarTurno(DatosBlackJack datosRecibidos) {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");	
 			ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();
 			actualizarPanelesJugadores();
+			
+			if(datosRecibidos.getReiniciar() == true) {
+				restart();
+				activarBotones(false);
+				areaMensajes.setText(datosRecibidos.getMensaje()+"\n");	
+				limpiar();
+				pintarCartasReinicio(datosRecibidos);	
+			}
 			
 			if(datosRecibidos.getJugador().contentEquals(yoId)){
 				if(datosRecibidos.getJugadorEstado().equals("iniciar")) {
@@ -271,7 +313,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 						}
 					}
 				}			 	
-		}		
+		}
+		
+		public void restart() {
+			this.modificarApuesta = false;
+			this.pantallaApuestasDesplegada = false;
+			this.finDeRonda = false;
+		}
 	   
 	   private void enviarDatos(String mensaje) {
 			// TODO Auto-generated method stub
@@ -389,9 +437,11 @@ public class VentanaSalaJuego extends JInternalFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 			// TODO Auto-generated method stub
 			if(actionEvent.getSource()==pedir) {
+				System.out.println("Aaaaaa!");
 				//enviar pedir carta al servidor
 				enviarDatos("pedir");				
 			}else {
+				System.out.println("SIUUUU!");
 				//enviar plantar al servidor
 				enviarDatos("plantar");
 				activarBotones(false);

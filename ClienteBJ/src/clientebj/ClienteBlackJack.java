@@ -355,23 +355,13 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 					
 					if(ventanaSalaJuego != null) {
 						ventanaSalaJuego.actualizarPanelesJugadores();
+						fluidClient();
 						if(ventanaSalaJuego.getModificarApuesta()) {
 							ventanaSalaJuego.wait(5000);
 						}
 					}
-					
-//					if(in.readObject().equals("Datos enviados")) {
-//						System.out.println("Datos del servidor recibidos");
-//						this.reajustarDatosJugador(datosRecibidos);
-//					}
-//					
-					mostrarMensajes("Beginning!");
-					datosRecibidos = new DatosBlackJack();
-					datosRecibidos = (DatosBlackJack)in.readObject();
-					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-					mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
-					
-					ventanaSalaJuego.pintarTurno(datosRecibidos);
+										
+					fluidClient();
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -383,6 +373,16 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				
 			}
 		
+	}
+	
+	private void fluidClient() throws ClassNotFoundException, IOException {
+		mostrarMensajes("Beginning!");
+		datosRecibidos = new DatosBlackJack();
+		datosRecibidos = (DatosBlackJack)in.readObject();
+		mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
+		mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
+		
+		ventanaSalaJuego.pintarTurno(datosRecibidos);
 	}
 
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {

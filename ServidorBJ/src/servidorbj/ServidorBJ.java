@@ -100,7 +100,7 @@ public class ServidorBJ implements Runnable{
 		manoJugador3 = new ArrayList<Carta>();
 		manoDealer = new ArrayList<Carta>();
 		
-		//reparto inicial jugadores 1 y 2
+		//reparto inicial jugadores 1, 2 y 3
 		for(int i=1;i<=2;i++) {
 		  carta = mazo.getCarta();
 		  manoJugador1.add(carta);
@@ -128,9 +128,15 @@ public class ServidorBJ implements Runnable{
 	private void calcularValorMano(Carta carta, int i) {
 		// TODO Auto-generated method stub
     	
-			if(carta.getValor().equals("As")) {
-				valorManos[i]+=11;
-			}else {
+		if(carta.getValor().equals("As")) {
+            if(valorManos[i]<=10) {
+                valorManos[i]+=11;
+            }
+            else {
+                valorManos[i]+=1;
+            }
+
+        }else {
 				if(carta.getValor().equals("J") || carta.getValor().equals("Q")
 						   || carta.getValor().equals("K")) {
 					valorManos[i]+=10;
@@ -181,7 +187,7 @@ public class ServidorBJ implements Runnable{
 	}
 	
     private boolean seTerminoRonda() {
-       return false;	
+       return this.finDeRonda;	
     }
     
     private void setTerminoRonda(boolean answer) {
@@ -310,7 +316,7 @@ public class ServidorBJ implements Runnable{
 	    		jugadores[2].enviarMensajeCliente(datosEnviar);
 	    		
     		}
-    	}else {
+    	}else if (entrada.equals("plantar")) {
     		//jugador en turno plantó
     		datosEnviar = new DatosBlackJack();
     		datosEnviar.setIdJugadores(idJugadores);
@@ -504,51 +510,118 @@ public class ServidorBJ implements Runnable{
 					break;
 				}
 			}
-			mostrarMensaje(String.format("index: %s, player's hand: %s, final value: %s", index, valorManos[index], valorFinal));
-			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] < valorManos[index]: %s", valorManos[LONGITUD_COLA] < valorManos[index]));
-			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] <= 21: %s", valorManos[LONGITUD_COLA] <= 21));
-			mostrarMensaje(String.format("valorManos[index] == 21: %s", valorManos[index] == 21));
-			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] == valorManos[index]: %s", valorManos[LONGITUD_COLA] == valorManos[index]));
 			if(valorManos[LONGITUD_COLA] <= 21) {
 				if(valorManos[LONGITUD_COLA] < valorManos[index]) {
 					if(valorManos[index] == 21) {
-						mostrarMensaje("[1]");
-						mostrarMensaje(String.format("valorFinal: %s", (valorFinal*1/1)));
 						return (valorFinal*1/1);
 					}
 					else {
-						mostrarMensaje("[2]");
-						mostrarMensaje(String.format("valorFinal: %s", (valorFinal*3/2)));
 						return (valorFinal*3/2);
 					}
 				}
 				if(valorManos[LONGITUD_COLA] == valorManos[index]) {
-					mostrarMensaje("[3]");
-					mostrarMensaje(String.format("valorFinal: %s", valorFinal));
 					return valorFinal;
 				}
 				else {
-					mostrarMensaje("[4]");
-					mostrarMensaje(String.format("valorFinal: %s", 0));
 					return 0;
 				}
 			}
 			else {
 				if(valorManos[index] == 21) {
-					mostrarMensaje("[5]");
-					mostrarMensaje(String.format("valorFinal: %s", (valorFinal*1/1)));
 					return (valorFinal*1/1);
 				}
 				else {
-					mostrarMensaje("[6]");
-					mostrarMensaje(String.format("valorFinal: %s", (valorFinal*3/2)));
 					return (valorFinal*3/2);
 				}
 			}
 		}
 		
+		//Dar nuevos valores a los mazos.------------------------------------------------------------
+		public void reiniciar() {
+			mostrarMensaje("Se reinició el juego");
+			finDeRonda = false;
+			dealerTermina = false;
+			jugadoresQueReinician = 0;
+			jugadoresQueTerminan = 0;
+			
+			Carta carta;
+			manoJugador1 = new ArrayList<Carta>();
+			manoJugador2 = new ArrayList<Carta>();
+			manoJugador3 = new ArrayList<Carta>();
+			manoDealer = new ArrayList<Carta>();
+			manosJugadores = new ArrayList<ArrayList<Carta>>();
+			mazo = new Baraja();
+			
+			for(int i = 0; i <= LONGITUD_COLA; i++) {
+				valorManos[i] = 0;
+			}
+			
+			//reparto inicial jugadores 1, 2 y 3
+			for(int i=1;i<=2;i++) {
+			  carta = mazo.getCarta();
+			  manoJugador1.add(carta);
+			  calcularValorMano(carta,0);
+			  carta = mazo.getCarta();
+			  manoJugador2.add(carta);
+			  calcularValorMano(carta,1);
+			  carta = mazo.getCarta();
+			  manoJugador3.add(carta);
+			  calcularValorMano(carta,2);
+			}
+			
+			//Carta inicial Dealer
+			carta = mazo.getCarta();
+			manoDealer.add(carta);
+			calcularValorMano(carta, LONGITUD_COLA);
+			
+			//gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
+			manosJugadores = new ArrayList<ArrayList<Carta>>(LONGITUD_COLA+1);
+			manosJugadores.add(manoJugador1);
+			manosJugadores.add(manoJugador2);
+			manosJugadores.add(manoJugador3);
+			manosJugadores.add(manoDealer);
+			
+		}
+		
 		private void reiniciarRonda() {
-			System.out.println("Server restarted the game!");
+			mostrarMensaje("Server restarted the game!");
+			//garantizar que solo se analice la petición del jugador en turno.
+    		//---------------------------------------------------------------------------------
+    		//Utiliza reiniciar y le envia al cliente (0) los nuevos valores, este mensaje lo lee al dar reiniciar en la vista
+    		//Actualizar barajas jugadores.
+    		reiniciar();
+    		datosEnviar = new DatosBlackJack();
+    		datosEnviar.setJugador(idJugadores[0]);
+			datosEnviar.setManoDealer(manoDealer);
+			datosEnviar.setManoJugador1(manoJugador1);
+			datosEnviar.setManoJugador2(manoJugador2);
+			datosEnviar.setManoJugador3(manoJugador3);
+			datosEnviar.setIdJugadores(idJugadores);
+			datosEnviar.setValorApuestas(valorApuestas);
+			datosEnviar.setValorManos(valorManos);
+			datosEnviar.setReiniciar(true);
+			datosEnviar.setJugadorEstado("iniciar");
+			datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+			
+			for(int i = 0; i < LONGITUD_COLA; i++) {
+				jugadores[i].enviarMensajeCliente(datosEnviar);
+			}
+			
+			bloqueoJuego.lock();
+			
+    		try {
+				//esperarInicio.await();
+				jugadores[indexJugador].setSuspendido(true);
+				esperarTurno.signalAll();
+				jugadorEnTurno = 0;
+			}finally {
+				bloqueoJuego.unlock();
+			}
+    		
+    		for(int i=0; i<LONGITUD_COLA;i++) {
+    			manejadorHilos.execute(jugadores[i]);
+    		}
+    		
 		}
 	   
 		@Override
@@ -673,7 +746,7 @@ public class ServidorBJ implements Runnable{
 				try {
 					idJugadores[2]=(String)in.readObject();
 					valorApuestas[2] = Double.parseDouble((String) in.readObject());
-					mostrarMensaje("Hilo jugador (3)"+idJugadores[2]);
+					mostrarMensaje("Hilo jugador (3) "+idJugadores[2]);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -728,7 +801,6 @@ public class ServidorBJ implements Runnable{
 						mostrarMensaje("Calculando Apuesta!");
 						String idPlayer = (String) in.readObject();
 						int finalValue = calcularGanancias(idPlayer);
-						mostrarMensaje(String.format("[end] valorFinal: %s", finalValue));
 						enviarMensajeCliente(finalValue);
 					}
 					if(!dealerTermina) {

@@ -28,7 +28,7 @@ public class PanelJugador extends JPanel {
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
 	private ImageIcon image;
-	
+	    
 	public PanelJugador(String datosJugador) {
 		//this.setBackground(Color.GREEN);
 		dibujoRecordar = new ArrayList<Recuerdo>();
@@ -38,6 +38,7 @@ public class PanelJugador extends JPanel {
 		bordes.setTitleColor(Color.WHITE);
 		this.setBorder(bordes);
 		this.setBackground(new Color(0,0,0,64));
+//		this.setOpaque(false);
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
@@ -53,6 +54,23 @@ public class PanelJugador extends JPanel {
 	public void pintarLaCarta (Carta carta) {
 		dibujoRecordar.add(new Recuerdo(carta,x));
 		x+=27;
+		repaint();
+	}
+	
+	public void pintarCartasReinicio(ArrayList<Carta> manoJugador) {
+		x=5;
+		for(int i=0;i<manoJugador.size();i++) {
+	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
+	    	x+=15;
+	    	//add(manoJugador.get(i));
+	    }
+		System.out.println(manoJugador.get(0).getValor());
+		//System.out.println(manoJugador.get(1).getValor());
+	    repaint();	  
+	}
+	
+	public void limpiar() {
+		dibujoRecordar.clear();
 		repaint();
 	}
 
