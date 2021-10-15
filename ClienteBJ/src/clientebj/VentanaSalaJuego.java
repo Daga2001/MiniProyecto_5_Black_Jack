@@ -95,6 +95,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 			mensajes = new JPanel();
 			mensajes.setOpaque(false);
+			mensajes.setBackground(new Color(255,255,255,60));
 			areaMensajes = new JTextArea(8,18);
 			areaMensajes.setBackground(new Color(255,255,255,60));
 			JScrollPane scroll = new JScrollPane(areaMensajes);	
