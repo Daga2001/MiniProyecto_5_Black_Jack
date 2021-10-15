@@ -81,3 +81,4 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 ## Update 1.6
 
 - El juego se reinicia y muestra las nuevas cartas
+- También, si un jugador decide no seguir jugando al final de una ronda, el servidor y los clientes se cierran
