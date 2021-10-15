@@ -28,7 +28,7 @@ public class PanelJugador extends JPanel {
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
 	private ImageIcon image;
-	    
+	
 	public PanelJugador(String datosJugador) {
 		//this.setBackground(Color.GREEN);
 		dibujoRecordar = new ArrayList<Recuerdo>();
