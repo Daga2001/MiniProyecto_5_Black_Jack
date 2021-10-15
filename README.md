@@ -63,3 +63,8 @@ Se añadio un tercer panel para el jugador 3, quedando 5 paneles a la vista de c
 ## Update 1.2
 
 Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sino imagenes.
+
+## Update 1.3
+
+Ahora se han implementado apuestas en el juego.
+Cada jugador puede apostar cuanto quiera al iniciar el juego.
