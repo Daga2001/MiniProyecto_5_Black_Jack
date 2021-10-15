@@ -28,12 +28,12 @@ public class VentanaSalaJuego extends JInternalFrame {
 		private PanelJugador dealer, yo, jugador2, jugador3;
 		private JTextArea areaMensajes;
 		private JButton pedir, plantar;
-		private JPanel panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3;
+		private JPanel mensajes, panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3;
 		private VentanaApuestas ventanaApuestas;
 		private ImageIcon image;
 		
 		private String yoId, jugador2Id, jugador3Id;
-		private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada;
+		private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada, finDeRonda;
 		private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 		private Escucha escucha;
 		
@@ -47,6 +47,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			this.cerrarConexion = false;
 			this.modificarApuesta = false;
 			this.pantallaApuestasDesplegada = false;
+			this.finDeRonda = false;
 			//this.datosRecibidos=datosRecibidos;
 						
 			initGUI();
@@ -92,7 +93,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			panelJugador3.add(jugador3);
 			panel.add(panelJugador3,BorderLayout.SOUTH);
 			
-			JPanel mensajes = new JPanel();
+			mensajes = new JPanel();
 			mensajes.setBackground(new Color(255,255,255,60));
 			areaMensajes = new JTextArea(8,18);
 //			areaMensajes.setDisabledTextColor(Color.WHITE);
@@ -151,6 +152,14 @@ public class VentanaSalaJuego extends JInternalFrame {
 		
 		public void setModificarApuesta(boolean bool) {
 			this.modificarApuesta = bool;
+		}
+		
+		public boolean getFinDeRonda() {
+			return this.finDeRonda;
+		}
+		
+		public void setFinDeRonda(boolean bool) {
+			this.finDeRonda = bool;
 		}
 		
 		public void actualizarDatosOtrosJugadores(String jugador2Id, double apuestaOtroJugador, String jugador3Id, double apuestaOtroJugador2) {
@@ -309,37 +318,65 @@ public class VentanaSalaJuego extends JInternalFrame {
 		   	return this.apuestaYo;
 	   }
 	   
+	   private int determinarGanancias(ClienteBlackJack cliente) {
+		   cliente.enviarMensajeServidor("calcular apuesta");
+		   cliente.enviarMensajeServidor(yoId);
+		   return cliente.calcularGanancias();
+	   }
+	   
+	   private void showFinalBet(ClienteBlackJack cliente) {
+		   int valor = determinarGanancias(cliente);
+		   String title = "Valor final!";
+		   String message = "";
+		   if(valor > 0) {
+			   message = String.format("El dealer te pagará %s USD!", valor);
+		   }
+		   else {
+			   message = String.format("Has perdido la apuesta, ahora tienes %s USD!", valor);
+		   }
+		   JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+	   }
+	   
+	   public void showRequestMessage(DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
+		   String title = "Nueva ronda!";
+		   String message = "Quieres Iniciar Una nueva ronda?";
+		   int sizeX = 50, sizeY = 50;
+		   image = new ImageIcon(this.getClass().getClassLoader().getResource("requestNewRound.png"));
+		   image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
+		   int answer = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, image);
+		   switch(answer) {
+	   			case JOptionPane.YES_OPTION:
+//									   ventanaApuestas = new VentanaApuestas(apuestaYo);
+//									   while(!ventanaApuestas.apuestaEstablecida()) {
+////										   System.out.println("I'm the infinity itself >:)");
+//										   cerrarConexion = ventanaApuestas.seCerroConexion();
+//										   if(this.cerrarConexion) {
+//											   cliente.cerrarConexion();
+//										   }
+//									   }
+//									   System.out.println("I'm not so inevitable");
+//									   calcularValorApuesta(ventanaApuestas.getValorApuesta(), datosRecibidos, cliente);
+//									   ventanaApuestas.dispose();
+	   								   cliente.enviarMensajeServidor("reiniciar ronda");
+									   break;
+	   			case JOptionPane.NO_OPTION:
+									   message = "Gracias por participar!!";
+									   title = "Hasta pronto, " + message;
+									   image = new ImageIcon(this.getClass().getClassLoader().getResource("ending.png"));
+									   JOptionPane.showMessageDialog(this, null, title, JOptionPane.INFORMATION_MESSAGE, image);
+									   cliente.cerrarConexion();
+									   break;
+	   		}
+	   }
+	   
 	   private void checkIfRoundIsOver(String dealerStatus, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
 		   if((dealerStatus.equals("voló") || dealerStatus.equals("plantó")) && !pantallaApuestasDesplegada) {
+			   this.finDeRonda = true;
 			   pantallaApuestasDesplegada = true;
-			   String title = "Nueva ronda!";
-			   String message = "Quieres Iniciar Una nueva ronda?";
-			   int sizeX = 50, sizeY = 50;
-			   image = new ImageIcon(this.getClass().getClassLoader().getResource("requestNewRound.png"));
-			   image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
-			   int answer = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, image);
-			   switch(answer) {
-		   			case JOptionPane.YES_OPTION:
-										   ventanaApuestas = new VentanaApuestas(apuestaYo);
-										   while(!ventanaApuestas.apuestaEstablecida()) {
-//											   System.out.println("I'm the infinity itself >:)");
-											   cerrarConexion = ventanaApuestas.seCerroConexion();
-											   if(this.cerrarConexion) {
-												   cliente.cerrarConexion();
-											   }
-										   }
-										   System.out.println("I'm not so inevitable");
-										   calcularValorApuesta(ventanaApuestas.getValorApuesta(), datosRecibidos, cliente);
-										   ventanaApuestas.dispose();
-										   break;
-		   			case JOptionPane.NO_OPTION:
-										   message = "Gracias por participar!!";
-										   title = "Hasta pronto, " + message;
-										   image = new ImageIcon(this.getClass().getClassLoader().getResource("ending.png"));
-										   JOptionPane.showMessageDialog(this, null, title, JOptionPane.INFORMATION_MESSAGE, image);
-										   cliente.cerrarConexion();
-										   break;
-		   		}
+			   //Ventana de aviso del valor final de la apuesta
+			   showFinalBet(cliente);
+			   //Ventana de pregunta
+			   showRequestMessage(datosRecibidos, cliente);
 		   }
 	   }
 	   
