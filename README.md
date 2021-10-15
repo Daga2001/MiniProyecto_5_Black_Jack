@@ -77,3 +77,7 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 ## Update 1.5
 
 - El juego ya es capaz de calcular las ganancias o perdidas de los jugadores.
+
+## Update 1.6
+
+- El juego se reinicia y muestra las nuevas cartas
