@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -141,7 +142,11 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		try {
 			out.writeObject(mensaje);
 			out.flush();
-		} catch (IOException e) {
+		}
+		catch (SocketException e) {
+			System.exit(0);
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -356,11 +361,8 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 					if(ventanaSalaJuego != null) {
 						ventanaSalaJuego.actualizarPanelesJugadores();
 						fluidClient();
-						if(ventanaSalaJuego.getModificarApuesta()) {
-							ventanaSalaJuego.wait(5000);
-						}
 					}
-										
+					
 					fluidClient();
 					
 				} catch (ClassNotFoundException e) {
@@ -376,13 +378,20 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	}
 	
 	private void fluidClient() throws ClassNotFoundException, IOException {
-		mostrarMensajes("Beginning!");
-		datosRecibidos = new DatosBlackJack();
-		datosRecibidos = (DatosBlackJack)in.readObject();
-		mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-		mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
-		
-		ventanaSalaJuego.pintarTurno(datosRecibidos);
+		try {
+			mostrarMensajes("Beginning!");
+			datosRecibidos = new DatosBlackJack();
+			datosRecibidos = (DatosBlackJack)in.readObject();
+			
+			mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
+			mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
+			
+			ventanaSalaJuego.pintarTurno(datosRecibidos);
+		}
+		catch(SocketException e) {
+			System.exit(0);
+		}
+
 	}
 
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {

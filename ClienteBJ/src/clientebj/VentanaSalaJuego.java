@@ -442,6 +442,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 									   title = "Hasta pronto, " + message;
 									   image = new ImageIcon(this.getClass().getClassLoader().getResource("ending.png"));
 									   JOptionPane.showMessageDialog(this, null, title, JOptionPane.INFORMATION_MESSAGE, image);
+									   cliente.enviarMensajeServidor("cerrar conexion");
 									   cliente.cerrarConexion();
 									   break;
 	   		}

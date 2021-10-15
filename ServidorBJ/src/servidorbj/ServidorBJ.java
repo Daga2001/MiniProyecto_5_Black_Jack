@@ -409,6 +409,17 @@ public class ServidorBJ implements Runnable{
     	dealer.start();
     }
     
+    private void closeConnection() {
+    	try {
+    		server.close();
+			conexionJugador.close();
+			System.exit(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     /*The Class Jugador. Clase interna que maneja el servidor para gestionar la comunicación
      * con cada cliente Jugador que se conecte
      */
@@ -520,7 +531,7 @@ public class ServidorBJ implements Runnable{
                     }
                 }
                 if(valorManos[LONGITUD_COLA] == valorManos[index]) {
-                    if(manosJugadores.get(index).size() == 2) {
+                    if(manosJugadores.get(index).size() == 2 && valorManos[index] == 21) {
                         return (valorFinal*3/2);
                     }
                     else {
@@ -794,6 +805,9 @@ public class ServidorBJ implements Runnable{
 			while(!seTerminoRonda()) {
 				try {
 					entrada = (String) in.readObject();
+					if(entrada.equals("cerrar conexion")) {
+						closeConnection();
+					}
 					if(entrada.equals("reiniciar ronda")) {
 						System.out.println("un jugador quiere reiniciar la ronda!");
 						jugadoresQueReinician++;
