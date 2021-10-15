@@ -38,7 +38,6 @@ public class PanelJugador extends JPanel {
 		bordes.setTitleColor(Color.WHITE);
 		this.setBorder(bordes);
 		this.setBackground(new Color(0,0,0,64));
-//		this.setOpaque(false);
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
