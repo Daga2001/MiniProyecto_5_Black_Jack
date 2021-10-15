@@ -40,7 +40,7 @@ import comunes.DatosBlackJack;
 public class ClienteBlackJack extends JFrame implements Runnable{
 	//Constantes de Interfaz Grafica
 	public static final int WIDTH=670;
-	public static final int HEIGHT=450;
+	public static final int HEIGHT=440;
 	
 	//Constantes de conexión con el Servidor BlackJack
 	public static final int PUERTO=7377;
@@ -74,6 +74,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		
 		//default window settings
 		this.setTitle("Juego BlackJack");
+		this.setBackground(new Color(55,222,37));
 		this.setSize(WIDTH, HEIGHT);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);

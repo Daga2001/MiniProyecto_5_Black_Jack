@@ -54,10 +54,12 @@ public class VentanaSalaJuego extends JInternalFrame {
 			//default window settings
 			this.setTitle("Sala de juego BlackJack - Jugador: "+yoId);
 			this.pack();
-			this.setLocation((ClienteBlackJack.WIDTH-this.getWidth())/2, 
-			         (ClienteBlackJack.HEIGHT-this.getHeight())/2);
+//			this.setLocation((ClienteBlackJack.WIDTH-this.getWidth())/2, 
+//			         (ClienteBlackJack.HEIGHT-this.getHeight())/2);
+			this.setLocation(((ClienteBlackJack.WIDTH/2)-(this.getWidth()/2))/2,((ClienteBlackJack.HEIGHT/2)-(this.getHeight()/2))/2);
 			this.setResizable(false);
 			this.show();
+			this.setOpaque(false);
 		}
 
 		private void initGUI() {
@@ -67,30 +69,40 @@ public class VentanaSalaJuego extends JInternalFrame {
 			//Create Listeners objects
 			escucha = new Escucha();
 			//Create Control objects
-						
+			
+			PanelWithImage panel = new PanelWithImage();
+			panel.setLayout(new BorderLayout());
+			
 			//Set up JComponents
 			panelDealer = new JPanel();
 			dealer = new PanelJugador("Dealer");
+			panelDealer.setOpaque(false);
 			panelDealer.add(dealer);
-			add(panelDealer,BorderLayout.NORTH);		
+			panel.add(panelDealer,BorderLayout.NORTH);		
 			
 			panelJugador2 = new JPanel();
 			jugador2= new PanelJugador(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));	
+			panelJugador2.setOpaque(false);
 			panelJugador2.add(jugador2);
-			add(panelJugador2,BorderLayout.EAST);
+			panel.add(panelJugador2,BorderLayout.EAST);
 			
 			panelJugador3 = new JPanel();
 			jugador3= new PanelJugador(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));	
+			panelJugador3.setOpaque(false);
 			panelJugador3.add(jugador3);
-			add(panelJugador3,BorderLayout.SOUTH);
+			panel.add(panelJugador3,BorderLayout.SOUTH);
 			
+			JPanel mensajes = new JPanel();
+			mensajes.setBackground(new Color(255,255,255,60));
 			areaMensajes = new JTextArea(8,18);
+//			areaMensajes.setDisabledTextColor(Color.WHITE);
 			JScrollPane scroll = new JScrollPane(areaMensajes);	
 			Border blackline;
 			blackline = BorderFactory.createLineBorder(Color.black);
 			TitledBorder bordes;
 			bordes = BorderFactory.createTitledBorder(blackline, "Area de Mensajes");
 	        bordes.setTitleJustification(TitledBorder.CENTER);
+//	        bordes.setTitleColor(Color.WHITE);
 			scroll.setBorder(bordes);
 			areaMensajes.setOpaque(false);
 			areaMensajes.setBackground(new Color(0, 0, 0, 0));
@@ -98,11 +110,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 
 			scroll.getViewport().setOpaque(false);
 			scroll.setOpaque(false);
-			add(scroll,BorderLayout.CENTER);
+			mensajes.add(scroll);
+			panel.add(mensajes,BorderLayout.CENTER);
 			
 			panelYo = new JPanel();
 			panelYo.setLayout(new BorderLayout());
 			yo = new PanelJugador(String.format("%s - apuesta: %s", yoId, apuestaYo));
+			panelYo.setOpaque(false);
 			panelYo.add(yo);
 				
 			pedir = new JButton("Carta");
@@ -112,14 +126,18 @@ public class VentanaSalaJuego extends JInternalFrame {
 			plantar.setEnabled(false);
 			plantar.addActionListener(escucha);
 			panelBotones = new JPanel();
+			panelBotones.setOpaque(false);
 			panelBotones.add(pedir);
 			panelBotones.add(plantar);
 			
 			yoFull = new JPanel();
 			yoFull.setPreferredSize(new Dimension(206,100));
+			yoFull.setOpaque(false);
 			yoFull.add(panelYo);
 			yoFull.add(panelBotones);
-			add(yoFull,BorderLayout.WEST);	
+			panel.add(yoFull,BorderLayout.WEST);	
+			
+			add(panel);
 		}
 		
 		public void activarBotones(boolean turno) {
@@ -257,16 +275,16 @@ public class VentanaSalaJuego extends JInternalFrame {
   	    	//panel jugador 1
 		   	TitledBorder bordes;
 		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", yoId, apuestaYo));
+		   	bordes.setTitleColor(Color.WHITE);
 		   	yo.setBorder(bordes);
-		   	System.out.println(String.format("%s - apuesta: %s", yoId, apuestaYo));
 		   	//panel jugador 2
 		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));
+		   	bordes.setTitleColor(Color.WHITE);
 		   	jugador2.setBorder(bordes);
-		   	System.out.println(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));
 		   	//panel jugador 3
 		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
+		   	bordes.setTitleColor(Color.WHITE);
 		   	jugador3.setBorder(bordes);
-		   	System.out.println(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
 		   	this.repaint();
 		   	this.validate();
 	   }

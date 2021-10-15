@@ -1,11 +1,14 @@
 package clientebj;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,10 @@ public class PanelJugador extends JPanel {
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
 		bordes = BorderFactory.createTitledBorder(datosJugador);
+		bordes.setTitleColor(Color.WHITE);
 		this.setBorder(bordes);
+		this.setBackground(new Color(0,0,0,64));
+//		this.setOpaque(false);
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
@@ -50,11 +56,15 @@ public class PanelJugador extends JPanel {
 		x+=27;
 		repaint();
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
 		Font font =new Font(Font.DIALOG,Font.BOLD,12);
 		g.setFont(font);
+		
+		//Color de fondo
+//		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 				
 		//pinta la mano inicial
 		for(int i=0;i<dibujoRecordar.size();i++) {
