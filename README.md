@@ -57,19 +57,23 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 ## Update 1.1
 
-Se implementa el juego con tres jugadores, lo cual quedaria con cuatro, contando el dealer (Se añadió un tercer cliente).
-Se añadio un tercer panel para el jugador 3, quedando 5 paneles a la vista de cada jugador, uno por cada jugador, y los otros dos para el dealer y los mensajes.
+- Se implementa el juego con tres jugadores, lo cual quedaria con cuatro, contando el dealer (Se añadió un tercer cliente).
+- Se añadio un tercer panel para el jugador 3, quedando 5 paneles a la vista de cada jugador, uno por cada jugador, y los otros dos para el dealer y los mensajes.
 
 ## Update 1.2
 
-Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sino imagenes.
+- Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sino imagenes.
 
 ## Update 1.3
 
-Ahora se han implementado apuestas en el juego.
-Cada jugador puede apostar cuanto quiera al iniciar el juego.
+- Ahora se han implementado apuestas en el juego.
+- Cada jugador puede apostar cuanto quiera al iniciar el juego.
 
 ## Update 1.4
 
-Se mejoraron los graficos de la mesa de juego.
-La mesa tiene una imagen de fondo, y cada panel de los jugadores tiene un fondo semitransparente
+- Se mejoraron los graficos de la mesa de juego.
+- La mesa tiene una imagen de fondo, y cada panel de los jugadores tiene un fondo semitransparente
+
+## Update 1.5
+
+- El juego ya es capaz de calcular las ganancias o perdidas de los jugadores.
