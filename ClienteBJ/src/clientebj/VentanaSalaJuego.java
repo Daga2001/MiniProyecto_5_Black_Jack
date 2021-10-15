@@ -94,19 +94,17 @@ public class VentanaSalaJuego extends JInternalFrame {
 			panel.add(panelJugador3,BorderLayout.SOUTH);
 			
 			mensajes = new JPanel();
-			mensajes.setBackground(new Color(255,255,255,60));
+			mensajes.setOpaque(false);
 			areaMensajes = new JTextArea(8,18);
-//			areaMensajes.setDisabledTextColor(Color.WHITE);
+			areaMensajes.setBackground(new Color(255,255,255,60));
 			JScrollPane scroll = new JScrollPane(areaMensajes);	
 			Border blackline;
 			blackline = BorderFactory.createLineBorder(Color.black);
 			TitledBorder bordes;
 			bordes = BorderFactory.createTitledBorder(blackline, "Area de Mensajes");
 	        bordes.setTitleJustification(TitledBorder.CENTER);
-//	        bordes.setTitleColor(Color.WHITE);
+	        bordes.setTitleColor(Color.WHITE);
 			scroll.setBorder(bordes);
-			areaMensajes.setOpaque(false);
-			areaMensajes.setBackground(new Color(0, 0, 0, 0));
 			areaMensajes.setEditable(false);
 
 			scroll.getViewport().setOpaque(false);
