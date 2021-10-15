@@ -511,29 +511,37 @@ public class ServidorBJ implements Runnable{
 				}
 			}
 			if(valorManos[LONGITUD_COLA] <= 21) {
-				if(valorManos[LONGITUD_COLA] < valorManos[index]) {
-					if(valorManos[index] == 21) {
-						return (valorFinal*1/1);
-					}
-					else {
-						return (valorFinal*3/2);
-					}
-				}
-				if(valorManos[LONGITUD_COLA] == valorManos[index]) {
-					return valorFinal;
-				}
-				else {
-					return 0;
-				}
-			}
-			else {
-				if(valorManos[index] == 21) {
-					return (valorFinal*1/1);
-				}
-				else {
-					return (valorFinal*3/2);
-				}
-			}
+                if(valorManos[LONGITUD_COLA] < valorManos[index] && valorManos[index] <= 21) {
+                    if(valorManos[index] == 21 && manosJugadores.get(index).size() == 2) {
+                        return (valorFinal*3/2);
+                    }
+                    else {
+                        return (valorFinal*1/1);
+                    }
+                }
+                if(valorManos[LONGITUD_COLA] == valorManos[index]) {
+                    if(manosJugadores.get(index).size() == 2) {
+                        return (valorFinal*3/2);
+                    }
+                    else {
+                        return valorFinal;
+                    }
+                }
+                else {
+                    return 0;
+                }
+            }
+            else {
+                if(valorManos[index] > 21) {
+                    return 0;
+                }
+                if(valorManos[index] == 21 && manosJugadores.get(index).size() == 2) {
+                    return (valorFinal*3/2);
+                }
+                else {
+                    return (valorFinal*1/1);
+                }
+            }
 		}
 		
 		//Dar nuevos valores a los mazos.------------------------------------------------------------

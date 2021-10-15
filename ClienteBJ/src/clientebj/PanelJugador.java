@@ -76,7 +76,7 @@ public class PanelJugador extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
+//		Graphics2D g2 = (Graphics2D) g;
 		Font font =new Font(Font.DIALOG,Font.BOLD,12);
 		g.setFont(font);
 		

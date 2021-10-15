@@ -229,11 +229,42 @@ public class VentanaSalaJuego extends JInternalFrame {
 				public void run() {
 					// TODO Auto-generated method stub
 					if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {
-						yo.pintarCartasReinicio(datosRecibidos.getManoJugador1());
-						jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador2());
-					}else {
-						yo.pintarCartasReinicio(datosRecibidos.getManoJugador2());
-						jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+						if (datosRecibidos.getIdJugadores()[1].equals(jugador2Id)) {
+							yo.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+							jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+						}
+						else {
+							yo.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+							jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+						}
+					}
+					else if(datosRecibidos.getIdJugadores()[0].equals(jugador2Id)) {
+						if (datosRecibidos.getIdJugadores()[1].equals(yoId)) {
+							yo.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+							jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+						}
+						else {
+							yo.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+							jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+						}
+					}
+					else {
+						if(datosRecibidos.getIdJugadores()[0].equals(jugador3Id)) {
+							if (datosRecibidos.getIdJugadores()[1].equals(yoId)) {
+								yo.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+								jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+								jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							}
+							else {
+								yo.pintarCartasReinicio(datosRecibidos.getManoJugador3());
+								jugador2.pintarCartasReinicio(datosRecibidos.getManoJugador2());
+								jugador3.pintarCartasReinicio(datosRecibidos.getManoJugador1());
+							}
+						}
 					}
 					dealer.pintarCartasReinicio(datosRecibidos.getManoDealer());
 					
