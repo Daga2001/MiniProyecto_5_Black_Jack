@@ -42,8 +42,8 @@ public class ServidorBJ implements Runnable{
 	
 	//variables de control del juego
 	private String[] idJugadores;
-	private volatile boolean finDeRonda;
-	private int jugadorEnTurno, jugadoresQueReinician;
+	private volatile boolean finDeRonda, dealerTermina;
+	private int jugadorEnTurno, jugadoresQueReinician, jugadoresQueTerminan;
 	//private boolean iniciarJuego;
 	private Baraja mazo;
 	private ArrayList<ArrayList<Carta>> manosJugadores;
@@ -88,7 +88,9 @@ public class ServidorBJ implements Runnable{
 		valorApuestas = new double[LONGITUD_COLA];
 		valorManos = new int[LONGITUD_COLA+1];
 		finDeRonda = false;
+		dealerTermina = false;
 		jugadoresQueReinician = 0;
+		jugadoresQueTerminan = 0;
 		
 		mazo = new Baraja();
 		Carta carta;
@@ -227,6 +229,8 @@ public class ServidorBJ implements Runnable{
 	    		jugadores[1].enviarMensajeCliente(datosEnviar);
 	    		jugadores[2].enviarMensajeCliente(datosEnviar);
 	    		
+	    		jugadoresQueTerminan++;
+	    		
 	    		//notificar a todos que jugador sigue
 	    		if(jugadorEnTurno==0) {
 	        		
@@ -320,6 +324,7 @@ public class ServidorBJ implements Runnable{
     		jugadores[1].enviarMensajeCliente(datosEnviar);
     		jugadores[2].enviarMensajeCliente(datosEnviar);
     		
+    		jugadoresQueTerminan++;
     		
     		//notificar a todos el jugador que sigue en turno
     		if(jugadorEnTurno==0) {
@@ -489,8 +494,61 @@ public class ServidorBJ implements Runnable{
 			}
 		}
 		
+		private int calcularGanancias(String idPlayer) {
+			int valorFinal = 0;
+			int index = 0;
+			for(int i = 0; i < idJugadores.length; i++) {
+				if(idJugadores[i].equals(idPlayer)) {
+					valorFinal = (int) valorApuestas[i];
+					index = i;
+					break;
+				}
+			}
+			mostrarMensaje(String.format("index: %s, player's hand: %s, final value: %s", index, valorManos[index], valorFinal));
+			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] < valorManos[index]: %s", valorManos[LONGITUD_COLA] < valorManos[index]));
+			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] <= 21: %s", valorManos[LONGITUD_COLA] <= 21));
+			mostrarMensaje(String.format("valorManos[index] == 21: %s", valorManos[index] == 21));
+			mostrarMensaje(String.format("valorManos[LONGITUD_COLA] == valorManos[index]: %s", valorManos[LONGITUD_COLA] == valorManos[index]));
+			if(valorManos[LONGITUD_COLA] <= 21) {
+				if(valorManos[LONGITUD_COLA] < valorManos[index]) {
+					if(valorManos[index] == 21) {
+						mostrarMensaje("[1]");
+						mostrarMensaje(String.format("valorFinal: %s", (valorFinal*1/1)));
+						return (valorFinal*1/1);
+					}
+					else {
+						mostrarMensaje("[2]");
+						mostrarMensaje(String.format("valorFinal: %s", (valorFinal*3/2)));
+						return (valorFinal*3/2);
+					}
+				}
+				if(valorManos[LONGITUD_COLA] == valorManos[index]) {
+					mostrarMensaje("[3]");
+					mostrarMensaje(String.format("valorFinal: %s", valorFinal));
+					return valorFinal;
+				}
+				else {
+					mostrarMensaje("[4]");
+					mostrarMensaje(String.format("valorFinal: %s", 0));
+					return 0;
+				}
+			}
+			else {
+				if(valorManos[index] == 21) {
+					mostrarMensaje("[5]");
+					mostrarMensaje(String.format("valorFinal: %s", (valorFinal*1/1)));
+					return (valorFinal*1/1);
+				}
+				else {
+					mostrarMensaje("[6]");
+					mostrarMensaje(String.format("valorFinal: %s", (valorFinal*3/2)));
+					return (valorFinal*3/2);
+				}
+			}
+		}
+		
 		private void reiniciarRonda() {
-			
+			System.out.println("Server restarted the game!");
 		}
 	   
 		@Override
@@ -658,12 +716,24 @@ public class ServidorBJ implements Runnable{
 					if(entrada.equals("reiniciar ronda")) {
 						System.out.println("un jugador quiere reiniciar la ronda!");
 						jugadoresQueReinician++;
-						leerSolicitud();
+//						leerSolicitud();
 						if(jugadoresQueReinician == LONGITUD_COLA) {
 							reiniciarRonda();
 						}
 					}
-					analizarMensaje(entrada,indexJugador);
+					if(entrada.equals("calcular apuesta")) {
+						while(!dealerTermina || jugadoresQueTerminan < LONGITUD_COLA) {
+							//do nothing
+						}
+						mostrarMensaje("Calculando Apuesta!");
+						String idPlayer = (String) in.readObject();
+						int finalValue = calcularGanancias(idPlayer);
+						mostrarMensaje(String.format("[end] valorFinal: %s", finalValue));
+						enviarMensajeCliente(finalValue);
+					}
+					if(!dealerTermina) {
+						analizarMensaje(entrada,indexJugador);
+					}
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -694,7 +764,7 @@ public class ServidorBJ implements Runnable{
 		mostrarMensaje("Incia el dealer ...");
         boolean pedir = true;
         
-        while(pedir) {
+        while(!dealerTermina) {
 		  	Carta carta = mazo.getCarta();
 			//adicionar la carta a la mano del dealer
 			manosJugadores.get(LONGITUD_COLA).add(carta);
@@ -717,11 +787,13 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[LONGITUD_COLA]+" voló :(");
 					pedir=false;
 					mostrarMensaje("El dealer voló");
+					dealerTermina = true;
 				}else {
 					datosEnviar.setJugadorEstado("plantó");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[LONGITUD_COLA]+" plantó");
 					pedir=false;
 					mostrarMensaje("El dealer plantó");
+					dealerTermina = true;
 				}
 			}
 			//envia la jugada a los otros jugadores

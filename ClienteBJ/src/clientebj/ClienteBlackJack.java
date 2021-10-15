@@ -15,6 +15,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -49,11 +52,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	//variables de control del juego
 	private String idYo, otroJugador, otroJugador2;
 	private boolean turno;
-	private int numeroJugadores;
+	private int numeroJugadores, valorGanancias;
 	private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 	private DatosBlackJack datosRecibidos;
 	private double[] nuevasApuestas;
 	private String[] idJugadores;
+	
+	//variables de control de hilos
+	private Lock locker;
+	private Condition threadsManager;
 	
 	//variables para manejar la conexión con el Servidor BlackJack
 	private Socket conexion;
@@ -92,6 +99,11 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		
 		//Create Control objects
 		turno=false;
+		
+		//Create threads-handler variables
+		locker = new ReentrantLock();
+		threadsManager = locker.newCondition();
+		
 		//Set up JComponents
 	
 		this.setBackground(SystemColor.activeCaption);
@@ -231,8 +243,28 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		}
 	}
 	
-	private void actualizarDatosVentanaSalaJuego() {
-		
+	public void sleep(int miliseconds) {
+		try {
+			System.out.println(String.format("Jugador %s se durmió", idYo));
+			Thread.sleep(miliseconds);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public int calcularGanancias() {
+		locker.lock();
+		try {
+			valorGanancias = (int) in.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			locker.unlock();
+		}
+		return valorGanancias;
 	}
 	
 	public void buscarServidor() {
