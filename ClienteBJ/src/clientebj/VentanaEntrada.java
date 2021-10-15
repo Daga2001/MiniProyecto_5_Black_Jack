@@ -14,9 +14,10 @@ import javax.swing.JTextField;
 
 public class VentanaEntrada extends JInternalFrame {
 	
-	private JLabel bienvenida, labelNombre;
+	private JLabel bienvenida, labelNombre, labelApuesta;
 	private JPanel ingreso;
 	private JTextField nombreJugador;
+	private JTextField apuestaJugador;
 	private JButton ingresar;
 	private VentanaEspera ventanaEspera;
 	private ClienteBlackJack cliente;
@@ -42,11 +43,15 @@ public class VentanaEntrada extends JInternalFrame {
 		add(bienvenida, BorderLayout.NORTH);
 
 		ingreso = new JPanel(); 
-		labelNombre= new JLabel("Nombre"); 
+		labelNombre = new JLabel("Nombre:"); 
 		nombreJugador =	new JTextField(10); 
+		labelApuesta = new JLabel("Apuesta:");
+		apuestaJugador = new JTextField(10);
 		ingresar = new JButton("Ingresar");
 		ingresar.addActionListener(escucha);
-		ingreso.add(labelNombre); ingreso.add(nombreJugador); ingreso.add(ingresar);
+		ingreso.add(labelNombre); ingreso.add(nombreJugador); 
+		ingreso.add(labelApuesta); ingreso.add(apuestaJugador);
+		ingreso.add(ingresar);
 		add(ingreso,BorderLayout.CENTER);
 	}
 	
@@ -58,6 +63,20 @@ public class VentanaEntrada extends JInternalFrame {
 		this.dispose();
 	}
 	
+	private boolean isNumber(String text) {
+		if(text == null || text.length() == 0) {
+			return false;
+		}
+		try {
+			@SuppressWarnings("unused")
+			double number = Double.parseDouble(text);
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
 	private class Escucha implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -65,8 +84,13 @@ public class VentanaEntrada extends JInternalFrame {
 			//cargar Sala de Espera y cerrar Ventana Entrada
 			if(nombreJugador.getText().length()==0) {
 				JOptionPane.showMessageDialog(null, "Debes ingresar un nombre para identificarte!!");
-			}else {
+			}
+			if(!isNumber(apuestaJugador.getText()) || apuestaJugador.getText().length()==0){
+				JOptionPane.showMessageDialog(null, "Debes ingresar un valor númerico en la apuesta!!");
+			}
+			else {
 				cliente.setIdYo(nombreJugador.getText());
+				cliente.setApuestaYo(apuestaJugador.getText());
 				ventanaEspera = new VentanaEspera(nombreJugador.getText());
 				getContainerFrames().add(ventanaEspera);
 				cliente.buscarServidor();

@@ -8,6 +8,7 @@ public class DatosBlackJack implements Serializable{
 	private String[] idJugadores;
 	private ArrayList<Carta> manoJugador1, manoJugador2, manoJugador3, manoDealer;
 	private int[] valorManos;
+	private double[] valorApuestas;
 	private Carta carta;
 	private String mensaje;
 	private String jugador,jugadorEstado;
@@ -31,6 +32,18 @@ public class DatosBlackJack implements Serializable{
 	}
 	public void setIdJugadores(String[] idJugadores) {
 		this.idJugadores = idJugadores;
+	}
+	
+	public double[] getValorApuestas() {
+		return valorApuestas;
+	}
+	
+	public void setValorApuestas(double[] valorApuestas) {
+		this.valorApuestas = valorApuestas;
+	}
+	
+	public void setValorApuesta(int index, double newValue) {
+		this.valorApuestas[index] = newValue;
 	}
 	
 	public ArrayList<Carta> getManoJugador1() {
@@ -80,5 +93,18 @@ public class DatosBlackJack implements Serializable{
 	}
 	public Carta getCarta() {
 		return carta;
+	}
+	public boolean isNumber(String text) {
+		if(text == null || text.length() == 0) {
+			return false;
+		}
+		try {
+			@SuppressWarnings("unused")
+			double number = Double.parseDouble(text);
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

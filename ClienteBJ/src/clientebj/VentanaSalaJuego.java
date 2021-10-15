@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -27,15 +29,24 @@ public class VentanaSalaJuego extends JInternalFrame {
 		private JTextArea areaMensajes;
 		private JButton pedir, plantar;
 		private JPanel panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3;
+		private VentanaApuestas ventanaApuestas;
+		private ImageIcon image;
 		
 		private String yoId, jugador2Id, jugador3Id;
-		//private DatosBlackJack datosRecibidos;
+		private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada;
+		private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 		private Escucha escucha;
 		
-		public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id) {
+		public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id, double apuestaYo, double apuestaOtroJugador, double apuestaOtroJugador2) {
 			this.yoId = yoId;
 			this.jugador2Id = jugador2Id;
 			this.jugador3Id = jugador3Id;
+			this.apuestaYo = apuestaYo;
+			this.apuestaOtroJugador = apuestaOtroJugador;
+			this.apuestaOtroJugador2 = apuestaOtroJugador2;
+			this.cerrarConexion = false;
+			this.modificarApuesta = false;
+			this.pantallaApuestasDesplegada = false;
 			//this.datosRecibidos=datosRecibidos;
 						
 			initGUI();
@@ -64,12 +75,12 @@ public class VentanaSalaJuego extends JInternalFrame {
 			add(panelDealer,BorderLayout.NORTH);		
 			
 			panelJugador2 = new JPanel();
-			jugador2= new PanelJugador(jugador2Id);	
+			jugador2= new PanelJugador(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));	
 			panelJugador2.add(jugador2);
 			add(panelJugador2,BorderLayout.EAST);
 			
 			panelJugador3 = new JPanel();
-			jugador3 = new PanelJugador(jugador3Id);	
+			jugador3= new PanelJugador(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));	
 			panelJugador3.add(jugador3);
 			add(panelJugador3,BorderLayout.SOUTH);
 			
@@ -91,7 +102,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 			panelYo = new JPanel();
 			panelYo.setLayout(new BorderLayout());
-			yo = new PanelJugador(yoId);
+			yo = new PanelJugador(String.format("%s - apuesta: %s", yoId, apuestaYo));
 			panelYo.add(yo);
 				
 			pedir = new JButton("Carta");
@@ -114,6 +125,31 @@ public class VentanaSalaJuego extends JInternalFrame {
 		public void activarBotones(boolean turno) {
 			pedir.setEnabled(turno);
 			plantar.setEnabled(turno);
+		}
+		
+		public boolean getModificarApuesta() {
+			return this.modificarApuesta;
+		}
+		
+		public void setModificarApuesta(boolean bool) {
+			this.modificarApuesta = bool;
+		}
+		
+		public void actualizarDatosOtrosJugadores(String jugador2Id, double apuestaOtroJugador, String jugador3Id, double apuestaOtroJugador2) {
+			this.jugador2Id = jugador2Id;
+			this.apuestaOtroJugador = apuestaOtroJugador;
+			this.jugador3Id = jugador3Id;
+			this.apuestaOtroJugador2 = apuestaOtroJugador2;
+		}
+		
+		public void wait(int miliseconds) {
+			try {
+				System.out.println(String.format("jugador %s se ha dormido", yoId));
+				Thread.sleep(miliseconds);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
@@ -163,6 +199,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		public void pintarTurno(DatosBlackJack datosRecibidos) {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");	
 			ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();
+			actualizarPanelesJugadores();
 			
 			if(datosRecibidos.getJugador().contentEquals(yoId)){
 				if(datosRecibidos.getJugadorEstado().equals("iniciar")) {
@@ -204,6 +241,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 						   datosRecibidos.getJugadorEstado().equals("voló")	||
 						   datosRecibidos.getJugadorEstado().equals("plantó")) {
 							dealer.pintarLaCarta(datosRecibidos.getCarta());
+							checkIfRoundIsOver(datosRecibidos.getJugadorEstado(), datosRecibidos, cliente);
 						}
 					}
 				}			 	
@@ -215,7 +253,82 @@ public class VentanaSalaJuego extends JInternalFrame {
 		  cliente.enviarMensajeServidor(mensaje);
 		}
 		   
-	  
+	   public void actualizarPanelesJugadores() {
+  	    	//panel jugador 1
+		   	TitledBorder bordes;
+		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", yoId, apuestaYo));
+		   	yo.setBorder(bordes);
+		   	System.out.println(String.format("%s - apuesta: %s", yoId, apuestaYo));
+		   	//panel jugador 2
+		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));
+		   	jugador2.setBorder(bordes);
+		   	System.out.println(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));
+		   	//panel jugador 3
+		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
+		   	jugador3.setBorder(bordes);
+		   	System.out.println(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
+		   	this.repaint();
+		   	this.validate();
+	   }
+	   
+	   private void asignarNuevaApuesta(double number) {
+		   this.apuestaYo = number;
+	   }
+	   
+	   private double calcularValorApuesta(double number, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
+		   	System.out.println("Hi poter!");
+		   	asignarNuevaApuesta(number);
+		   	System.out.println(String.format("jugador %s solicita reiniciar la ronda", yoId));
+		   	cliente.enviarMensajeServidor("reiniciar ronda");
+		   	System.out.println(String.format("valor nueva apuesta: %s", apuestaYo));
+		   	cliente.enviarMensajeServidor(String.valueOf(apuestaYo));
+		   	cliente.enviarMensajeServidor(yoId);
+		   	modificarApuesta = true;
+		   	cliente.reajustarDatosJugador(datosRecibidos);
+		   	actualizarPanelesJugadores();
+//		   	cliente.enviarMensajeServidor("cambios ajustados");
+		   	System.out.println("los cambios del jugador: "+yoId+" se han realizado con éxito");
+		   	return this.apuestaYo;
+	   }
+	   
+	   private void checkIfRoundIsOver(String dealerStatus, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
+		   if((dealerStatus.equals("voló") || dealerStatus.equals("plantó")) && !pantallaApuestasDesplegada) {
+			   pantallaApuestasDesplegada = true;
+			   String title = "Nueva ronda!";
+			   String message = "Quieres Iniciar Una nueva ronda?";
+			   int sizeX = 50, sizeY = 50;
+			   image = new ImageIcon(this.getClass().getClassLoader().getResource("requestNewRound.png"));
+			   image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
+			   int answer = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, image);
+			   switch(answer) {
+		   			case JOptionPane.YES_OPTION:
+										   ventanaApuestas = new VentanaApuestas(apuestaYo);
+										   while(!ventanaApuestas.apuestaEstablecida()) {
+//											   System.out.println("I'm the infinity itself >:)");
+											   cerrarConexion = ventanaApuestas.seCerroConexion();
+											   if(this.cerrarConexion) {
+												   cliente.cerrarConexion();
+											   }
+										   }
+										   System.out.println("I'm not so inevitable");
+										   calcularValorApuesta(ventanaApuestas.getValorApuesta(), datosRecibidos, cliente);
+										   ventanaApuestas.dispose();
+										   break;
+		   			case JOptionPane.NO_OPTION:
+										   message = "Gracias por participar!!";
+										   title = "Hasta pronto, " + message;
+										   image = new ImageIcon(this.getClass().getClassLoader().getResource("ending.png"));
+										   JOptionPane.showMessageDialog(this, null, title, JOptionPane.INFORMATION_MESSAGE, image);
+										   cliente.cerrarConexion();
+										   break;
+		   		}
+		   }
+	   }
+	   
+	   public boolean seCerroConexion() {
+		   return this.cerrarConexion;
+	   }
+	   
 	   private class Escucha implements ActionListener{
 
 		@Override
