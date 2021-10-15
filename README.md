@@ -68,3 +68,8 @@ Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sin
 
 Ahora se han implementado apuestas en el juego.
 Cada jugador puede apostar cuanto quiera al iniciar el juego.
+
+## Update 1.4
+
+Se mejoraron los graficos de la mesa de juego.
+La mesa tiene una imagen de fondo, y cada panel de los jugadores tiene un fondo semitransparente
