@@ -374,21 +374,30 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private void fluidClient() throws ClassNotFoundException, IOException {
-		try {
-			mostrarMensajes("Beginning!");
-			datosRecibidos = new DatosBlackJack();
-			datosRecibidos = (DatosBlackJack)in.readObject();
-			
-			mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
-			mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
-			
-			ventanaSalaJuego.pintarTurno(datosRecibidos);
-		}
-		catch(SocketException e) {
-			System.exit(0);
-		}
+        try {
+            this.setContentPane(containerInternalFrames);
+            containerInternalFrames.repaint();
+            containerInternalFrames.revalidate();
+            this.repaint();
+            this.revalidate();
 
-	}
+            mostrarMensajes("Beginning!");
+            datosRecibidos = new DatosBlackJack();
+            datosRecibidos = (DatosBlackJack)in.readObject();
+
+            mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
+            mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
+
+            ventanaSalaJuego.pintarTurno(datosRecibidos);
+        }
+        catch(SocketException e) {
+            System.exit(0);
+        }
+        catch(IOException e) {
+            System.exit(0);
+        }
+
+    }
 
 	/**
 	 * Habilitar sala juego.

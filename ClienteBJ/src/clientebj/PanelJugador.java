@@ -55,8 +55,7 @@ public class PanelJugador extends JPanel {
 		bordes = BorderFactory.createTitledBorder(datosJugador);
 		bordes.setTitleColor(Color.WHITE);
 		this.setBorder(bordes);
-		//this.setBackground(new Color(0,0,0,64));
-		this.setBackground(new Color(0,0,0));
+		this.setOpaque(false);
 
 	}
 	
@@ -118,8 +117,13 @@ public class PanelJugador extends JPanel {
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Font font =new Font(Font.DIALOG,Font.BOLD,12);
-		g.setFont(font);
+        Graphics2D g2 = (Graphics2D) g;
+        Font font =new Font(Font.DIALOG,Font.BOLD,12);
+        g.setFont(font);
+
+        //Color de fondo
+        g2.setColor(new Color(0,0,0,64));
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 				
 		//pinta la mano inicial
 		for(int i=0;i<dibujoRecordar.size();i++) {

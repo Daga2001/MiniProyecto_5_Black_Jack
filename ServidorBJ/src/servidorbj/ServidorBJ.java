@@ -179,7 +179,6 @@ public class ServidorBJ implements Runnable{
 	public void iniciar() {
        	//esperar a los clientes
     	mostrarMensaje("Esperando a los jugadores...");
-    	
     	for(int i=0; i<LONGITUD_COLA;i++) {
     		try {
 				conexionJugador = server.accept();
