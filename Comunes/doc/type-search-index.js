@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"comunes","l":"Baraja"},{"p":"comunes","l":"Carta"},{"p":"comunes","l":"DatosBlackJack"}];updateSearchResults();
