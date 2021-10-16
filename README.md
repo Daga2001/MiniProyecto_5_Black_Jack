@@ -85,4 +85,4 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 ## Update 1.7
 
-- E código esta documentado
+- El código esta documentado
