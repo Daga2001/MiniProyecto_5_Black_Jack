@@ -1,3 +1,11 @@
+/*
+ * Programación Interactiva.
+ * Autores: Miguel Angel Fernandez Villaquiran - 1941923.
+ *          David Alberto Guzman Ardila - 1942789
+ *          Diego Fernando Chaverra - 1940322
+ * Mini proyecto 5: Blackjack.
+ */
+
 package comunes;
 
 import java.io.Serializable;
