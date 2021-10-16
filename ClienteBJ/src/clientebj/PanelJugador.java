@@ -55,7 +55,8 @@ public class PanelJugador extends JPanel {
 		bordes = BorderFactory.createTitledBorder(datosJugador);
 		bordes.setTitleColor(Color.WHITE);
 		this.setBorder(bordes);
-		this.setBackground(new Color(0,0,0,64));
+		//this.setBackground(new Color(0,0,0,64));
+		this.setBackground(new Color(0,0,0));
 
 	}
 	
