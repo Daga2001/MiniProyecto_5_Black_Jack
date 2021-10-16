@@ -65,12 +65,13 @@ public class PanelJugador extends JPanel {
 	 * @param manoJugador Es el array que contiene las cartas del jugador.
 	 */
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
+		dibujoRecordar = new ArrayList<Recuerdo>();
 		x=5;
 	    for(int i=0;i<manoJugador.size();i++) {
 	    	Recuerdo recuerdo = new Recuerdo(manoJugador.get(i),x);
 	    	dibujoRecordar.add(recuerdo);
 	    	x+=15;
-	    }			
+	    }
 	    repaint();
 	}
 	
@@ -91,13 +92,13 @@ public class PanelJugador extends JPanel {
 	 * @param manoJugador Es el array que contiene las cartas del jugador.
 	 */
 	public void pintarCartasReinicio(ArrayList<Carta> manoJugador) {
+		dibujoRecordar = new ArrayList<Recuerdo>();
 		x=5;
 		for(int i=0;i<manoJugador.size();i++) {
 	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
 	    	x+=15;
-	    	
 	    }
-	    repaint();	  
+	    repaint();  
 	}
 	
 	/**
@@ -105,8 +106,8 @@ public class PanelJugador extends JPanel {
 	 * Reestablece el array de cartas recordadas.
 	 */
 	public void limpiar() {
-		dibujoRecordar = new ArrayList<Recuerdo>();
-		repaint();
+		dibujoRecordar = new ArrayList<Recuerdo>(); 
+		this.revalidate();
 	}
 
 	/**
@@ -129,7 +130,8 @@ public class PanelJugador extends JPanel {
 			image = new ImageIcon(this.getClass().getClassLoader().getResource(String.format("%s.png", card)));
 			image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
 			g.drawImage(image.getImage(), x , y, image.getImageObserver());
-		}	
+		}
+		this.revalidate();	
 	}
 	
 	/**
