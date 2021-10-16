@@ -1,3 +1,10 @@
+/*
+ * Programación Interactiva.
+ * Autores: Miguel Angel Fernandez Villaquiran - 1941923.
+ * 			David Alberto Guzman Ardila - 1942789
+ * 			Diego Fernando Chaverra - 1940322
+ * Mini proyecto 5: Blackjack.
+ */
 package clientebj;
 
 import java.awt.BorderLayout;
@@ -12,6 +19,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VentanaEntrada.
+ * Clase que se encarga de gestionar la ventana cuando el jugador ingresa al juego.
+ */
 public class VentanaEntrada extends JInternalFrame {
 	
 	private JLabel bienvenida, labelNombre, labelApuesta;
@@ -21,9 +33,13 @@ public class VentanaEntrada extends JInternalFrame {
 	private JButton ingresar;
 	private VentanaEspera ventanaEspera;
 	private ClienteBlackJack cliente;
-	
 	private Escucha escucha;
 	
+	/**
+	 * Instantiates a new ventana entrada.
+	 * Constructor de la clase.
+	 * @param cliente the cliente que entra.
+	 */
 	public VentanaEntrada(ClienteBlackJack cliente) {
 		this.cliente=cliente;
 		initInternalFrame();
@@ -35,6 +51,10 @@ public class VentanaEntrada extends JInternalFrame {
 		this.show();
 	}
 
+	/**
+	 * Inits the internal frame.
+	 * Inicia el JInternalFrame y le pide los datos para registrar el cliente.
+	 */
 	private void initInternalFrame() {
 		// TODO Auto-generated method stub
 		escucha = new Escucha();
@@ -55,14 +75,29 @@ public class VentanaEntrada extends JInternalFrame {
 		add(ingreso,BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Gets the container frames.
+	 * Obtiene en quién está contenido.
+	 * @return the container frames
+	 */
 	private Container getContainerFrames() {
 		return this.getParent();
 	}
     
+	/**
+	 * Cerrar ventana entrada.
+	 * Cierra la ventana.
+	 */
 	private void cerrarVentanaEntrada() {
 		this.dispose();
 	}
 	
+	/**
+	 * Checks if is number.
+	 * Revisa si el dato ingresado como string es número.
+	 * @param text the text
+	 * @return true, if is number
+	 */
 	private boolean isNumber(String text) {
 		if(text == null || text.length() == 0) {
 			return false;
@@ -77,7 +112,17 @@ public class VentanaEntrada extends JInternalFrame {
 		return true;
 	}
 	
+	/**
+	 * The Class Escucha.
+	 * Clase privada que implementa el actionListener.
+	 */
 	private class Escucha implements ActionListener{
+		
+		/**
+		 * Action performed.
+		 * Identifica si el cliente ha ingresado mal los datos o procede a crear la ventana de espera y destruir esta.
+		 * @param arg0 the arg 0
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub

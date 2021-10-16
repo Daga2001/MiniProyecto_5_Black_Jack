@@ -1,3 +1,10 @@
+/*
+ * Programación Interactiva.
+ * Autores: Miguel Angel Fernandez Villaquiran - 1941923.
+ * 			David Alberto Guzman Ardila - 1942789
+ * 			Diego Fernando Chaverra - 1940322
+ * Mini proyecto 5: Blackjack.
+ */
 package clientebj;
 
 import java.awt.BorderLayout;
@@ -23,20 +30,33 @@ import javax.swing.border.TitledBorder;
 
 import comunes.DatosBlackJack;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VentanaSalaJuego.
+ * Es la clase que construye la ventana donde se desarrollará el juego, incluye a los paneles de los jugadores y eventos que suceden.
+ */
 public class VentanaSalaJuego extends JInternalFrame {
-	    
+	
 		private PanelJugador dealer, yo, jugador2, jugador3;
 		private JTextArea areaMensajes;
 		private JButton pedir, plantar;
 		private JPanel mensajes, panelYo, panelBotones, yoFull, panelDealer, panelJugador2, panelJugador3;
-		private VentanaApuestas ventanaApuestas;
 		private ImageIcon image;
-		
 		private String yoId, jugador2Id, jugador3Id;
 		private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada, finDeRonda;
 		private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 		private Escucha escucha;
 		
+		/**
+		 * Instantiates a new ventana sala juego.
+		 * Constructor de la clase.
+		 * @param yoId the yo id
+		 * @param jugador2Id the jugador 2 id
+		 * @param jugador3Id the jugador 3 id
+		 * @param apuestaYo the apuesta yo
+		 * @param apuestaOtroJugador the apuesta otro jugador
+		 * @param apuestaOtroJugador2 the apuesta otro jugador 2
+		 */
 		public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id, double apuestaYo, double apuestaOtroJugador, double apuestaOtroJugador2) {
 			this.yoId = yoId;
 			this.jugador2Id = jugador2Id;
@@ -48,21 +68,22 @@ public class VentanaSalaJuego extends JInternalFrame {
 			this.modificarApuesta = false;
 			this.pantallaApuestasDesplegada = false;
 			this.finDeRonda = false;
-			//this.datosRecibidos=datosRecibidos;
 						
 			initGUI();
 			
 			//default window settings
 			this.setTitle("Sala de juego BlackJack - Jugador: "+yoId);
 			this.pack();
-//			this.setLocation((ClienteBlackJack.WIDTH-this.getWidth())/2, 
-//			         (ClienteBlackJack.HEIGHT-this.getHeight())/2);
 			this.setLocation(((ClienteBlackJack.WIDTH/2)-(this.getWidth()/2))/2,((ClienteBlackJack.HEIGHT/2)-(this.getHeight()/2))/2);
 			this.setResizable(false);
 			this.show();
 			this.setOpaque(false);
 		}
 
+		/**
+		 * Inits the GUI.
+		 * Inicia y adiciona los componentes graficos a la ventana.
+		 */
 		private void initGUI() {
 			// TODO Auto-generated method stub
 			// set up JFrame Container y Layout
@@ -140,44 +161,22 @@ public class VentanaSalaJuego extends JInternalFrame {
 			add(panel);
 		}
 		
+		/**
+		 * Activar botones.
+		 * Activa o desactivas los botones pedir y plantar deacuerdo al estado que reciban.
+		 * @param turno the turno
+		 */
 		public void activarBotones(boolean turno) {
 			pedir.setEnabled(turno);
 			plantar.setEnabled(turno);
 		}
 		
-		public boolean getModificarApuesta() {
-			return this.modificarApuesta;
-		}
 		
-		public void setModificarApuesta(boolean bool) {
-			this.modificarApuesta = bool;
-		}
-		
-		public boolean getFinDeRonda() {
-			return this.finDeRonda;
-		}
-		
-		public void setFinDeRonda(boolean bool) {
-			this.finDeRonda = bool;
-		}
-		
-		public void actualizarDatosOtrosJugadores(String jugador2Id, double apuestaOtroJugador, String jugador3Id, double apuestaOtroJugador2) {
-			this.jugador2Id = jugador2Id;
-			this.apuestaOtroJugador = apuestaOtroJugador;
-			this.jugador3Id = jugador3Id;
-			this.apuestaOtroJugador2 = apuestaOtroJugador2;
-		}
-		
-		public void wait(int miliseconds) {
-			try {
-				System.out.println(String.format("jugador %s se ha dormido", yoId));
-				Thread.sleep(miliseconds);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
+		/**
+		 * Pintar cartas inicio.
+		 * Pinta las cartas iniciales para cada jugador.
+		 * @param datosRecibidos the datos recibidos para pintar las cartas.
+		 */
 		public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
 			if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {
 				if (datosRecibidos.getIdJugadores()[1].equals(jugador2Id)) {
@@ -222,6 +221,11 @@ public class VentanaSalaJuego extends JInternalFrame {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");
 		}
 		
+		/**
+		 * Pintar cartas reinicio.
+		 * Pinta las cartas nuevas después del reinicio.
+		 * @param datosRecibidos the datos recibidos
+		 */
 		public void pintarCartasReinicio(DatosBlackJack datosRecibidos) {
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -273,6 +277,10 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 		}
 		
+		/**
+		 * Limpiar.
+		 * Limpia los paneles.
+		 */
 		public void limpiar() {
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -287,6 +295,11 @@ public class VentanaSalaJuego extends JInternalFrame {
 			});
 		}
 		
+		/**
+		 * Pintar turno.
+		 * Dependiendo de la información recibida activara botones, pasará de turno o reiniciará la ronda del jugador.
+		 * @param datosRecibidos the datos recibidos
+		 */
 		public void pintarTurno(DatosBlackJack datosRecibidos) {
 			areaMensajes.append(datosRecibidos.getMensaje()+"\n");	
 			ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();
@@ -346,19 +359,32 @@ public class VentanaSalaJuego extends JInternalFrame {
 				}			 	
 		}
 		
+		/**
+		 * Restart.
+		 * Establece como false las variables modificarApuesta, pantallaApuestasDesplegada y finDeRonda.
+		 */
 		public void restart() {
 			this.modificarApuesta = false;
 			this.pantallaApuestasDesplegada = false;
 			this.finDeRonda = false;
 		}
 	   
-	   private void enviarDatos(String mensaje) {
+	   /**
+   	 * Enviar datos.
+   	 * Envia los datos pasados al servidor.
+   	 * @param mensaje the mensaje
+   	 */
+   	private void enviarDatos(String mensaje) {
 			// TODO Auto-generated method stub
 		  ClienteBlackJack cliente = (ClienteBlackJack)this.getTopLevelAncestor();
 		  cliente.enviarMensajeServidor(mensaje);
 		}
 		   
-	   public void actualizarPanelesJugadores() {
+	   /**
+   	 * Actualizar paneles jugadores.
+   	 * Actualiza  los paneles de los jugadores.
+   	 */
+   	public void actualizarPanelesJugadores() {
   	    	//panel jugador 1
 		   	TitledBorder bordes;
 		   	bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", yoId, apuestaYo));
@@ -376,33 +402,25 @@ public class VentanaSalaJuego extends JInternalFrame {
 		   	this.validate();
 	   }
 	   
-	   private void asignarNuevaApuesta(double number) {
-		   this.apuestaYo = number;
-	   }
 	   
-	   private double calcularValorApuesta(double number, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
-		   	System.out.println("Hi poter!");
-		   	asignarNuevaApuesta(number);
-		   	System.out.println(String.format("jugador %s solicita reiniciar la ronda", yoId));
-		   	cliente.enviarMensajeServidor("reiniciar ronda");
-		   	System.out.println(String.format("valor nueva apuesta: %s", apuestaYo));
-		   	cliente.enviarMensajeServidor(String.valueOf(apuestaYo));
-		   	cliente.enviarMensajeServidor(yoId);
-		   	modificarApuesta = true;
-		   	cliente.reajustarDatosJugador(datosRecibidos);
-		   	actualizarPanelesJugadores();
-//		   	cliente.enviarMensajeServidor("cambios ajustados");
-		   	System.out.println("los cambios del jugador: "+yoId+" se han realizado con éxito");
-		   	return this.apuestaYo;
-	   }
-	   
-	   private int determinarGanancias(ClienteBlackJack cliente) {
+	   /**
+   	 * Determinar ganancias.
+   	 * Le envia datos al servidor y le pide calcula la ganacia
+   	 * @param cliente the cliente el cliente a evaluar.
+   	 * @return the int el valor recibido de esta acción
+   	 */
+   	private int determinarGanancias(ClienteBlackJack cliente) {
 		   cliente.enviarMensajeServidor("calcular apuesta");
 		   cliente.enviarMensajeServidor(yoId);
 		   return cliente.calcularGanancias();
 	   }
 	   
-	   private void showFinalBet(ClienteBlackJack cliente) {
+	   /**
+   	 * Show final bet.
+   	 * Muestra la información final del juego sobre el estado de la partida.
+   	 * @param cliente the cliente
+   	 */
+   	private void showFinalBet(ClienteBlackJack cliente) {
 		   int valor = determinarGanancias(cliente);
 		   String title = "Valor final!";
 		   String message = "";
@@ -415,7 +433,13 @@ public class VentanaSalaJuego extends JInternalFrame {
 		   JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
 	   }
 	   
-	   public void showRequestMessage(DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
+	   /**
+   	 * Show request message.
+   	 * Pregunta si se desea o no jugar otra partida, de ser si reinicia la ronda de lo contrario cierra la ventana.
+   	 * @param datosRecibidos the datos recibidos
+   	 * @param cliente the cliente
+   	 */
+   	public void showRequestMessage(DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
 		   String title = "Nueva ronda!";
 		   String message = "Quieres Iniciar Una nueva ronda?";
 		   int sizeX = 50, sizeY = 50;
@@ -424,17 +448,6 @@ public class VentanaSalaJuego extends JInternalFrame {
 		   int answer = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, image);
 		   switch(answer) {
 	   			case JOptionPane.YES_OPTION:
-//									   ventanaApuestas = new VentanaApuestas(apuestaYo);
-//									   while(!ventanaApuestas.apuestaEstablecida()) {
-////										   System.out.println("I'm the infinity itself >:)");
-//										   cerrarConexion = ventanaApuestas.seCerroConexion();
-//										   if(this.cerrarConexion) {
-//											   cliente.cerrarConexion();
-//										   }
-//									   }
-//									   System.out.println("I'm not so inevitable");
-//									   calcularValorApuesta(ventanaApuestas.getValorApuesta(), datosRecibidos, cliente);
-//									   ventanaApuestas.dispose();
 	   								   cliente.enviarMensajeServidor("reiniciar ronda");
 									   break;
 	   			case JOptionPane.NO_OPTION:
@@ -448,7 +461,14 @@ public class VentanaSalaJuego extends JInternalFrame {
 	   		}
 	   }
 	   
-	   private void checkIfRoundIsOver(String dealerStatus, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
+	   /**
+   	 * Check if round is over.
+   	 * Revisa si la ronda ha terminado y se la pasa a showRequestMessage
+   	 * @param dealerStatus the dealer status
+   	 * @param datosRecibidos the datos recibidos
+   	 * @param cliente the cliente
+   	 */
+   	private void checkIfRoundIsOver(String dealerStatus, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
 		   if((dealerStatus.equals("voló") || dealerStatus.equals("plantó")) && !pantallaApuestasDesplegada) {
 			   this.finDeRonda = true;
 			   pantallaApuestasDesplegada = true;
@@ -459,22 +479,34 @@ public class VentanaSalaJuego extends JInternalFrame {
 		   }
 	   }
 	   
-	   public boolean seCerroConexion() {
+	   /**
+   	 * Se cerro conexion.
+   	 * Retorna la variable cerrarConexion
+   	 * @return true, if successful
+   	 */
+   	public boolean seCerroConexion() {
 		   return this.cerrarConexion;
 	   }
 	   
-	   private class Escucha implements ActionListener{
+	   /**
+   	 * The Class Escucha.
+   	 * Clase privada que implementa ActionListener.
+   	 */
+   	private class Escucha implements ActionListener{
 
+		/**
+		 * Action performed.
+		 * Da la acción (enviar al servidor) cuando escucha el accionar de pedir o plantar.
+		 * @param actionEvent the action event
+		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			// TODO Auto-generated method stub
 			if(actionEvent.getSource()==pedir) {
 				System.out.println("Aaaaaa!");
-				//enviar pedir carta al servidor
 				enviarDatos("pedir");				
 			}else {
 				System.out.println("SIUUUU!");
-				//enviar plantar al servidor
 				enviarDatos("plantar");
 				activarBotones(false);
 			}

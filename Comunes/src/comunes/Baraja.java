@@ -1,3 +1,11 @@
+/*
+ * Programación Interactiva.
+ * Autores: Miguel Angel Fernandez Villaquiran - 1941923.
+ *          David Alberto Guzman Ardila - 1942789
+ *          Diego Fernando Chaverra - 1940322
+ * Mini proyecto 5: Blackjack.
+ */
+
 package comunes;
 
 import java.awt.image.BufferedImage;
@@ -8,10 +16,18 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+/**
+ * The Class Baraja.
+ */
 public class Baraja {
-   private ArrayList<Carta> mazo;
-   private Random aleatorio;
+   private ArrayList<Carta> mazo;				// Cartas de juego
+   private Random aleatorio;					// Generador de numeros random
    
+   /**
+    * Instantiates a new baraja.
+    * Constructor de la calse
+    * Sonstruye y asigna un valor a las cartas de juego
+    */
    public Baraja() {
 	   aleatorio = new Random();
 	   mazo = new ArrayList<Carta>();
@@ -35,6 +51,11 @@ public class Baraja {
 	   }
    }
    
+   /**
+    * Gets the carta.
+    * Retirna una carta aleatoria del maso
+    * @return the carta
+    */
    public Carta getCarta() {
 	   int index = aleatorio.nextInt(mazoSize());
 	   Carta carta = mazo.get(index);
@@ -42,6 +63,11 @@ public class Baraja {
 	   return carta;
    }
    
+   /**
+    * Mazo size.
+    * Retorna el tamaño del mazo
+    * @return the int
+    */
    public int mazoSize() {
 	   return mazo.size();
    }
