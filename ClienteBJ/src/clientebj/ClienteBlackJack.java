@@ -33,6 +33,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -42,6 +43,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import comunes.DatosBlackJack;
+import comunes.MusicManager;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -65,6 +67,9 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	private DatosBlackJack datosRecibidos;
 	private double[] nuevasApuestas;
 	private String[] idJugadores;
+	
+	//control de música
+	private MusicManager musicManager;
 	
 	//variables de control de hilos
 	private Lock locker;
@@ -108,6 +113,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		//Create Listeners objects
 		
 		//Create Control objects
+		musicManager = new MusicManager();
 		turno=false;
 		
 		//Create threads-handler variables
@@ -182,6 +188,11 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			out.flush();
 		}
 		catch (SocketException e) {
+			musicManager.stopBackgroundMusic();
+			musicManager.playMusic(3);
+			String title = "Hasta Pronto!";
+			String message = "Uno o varios jugadores decidieron abandonar la partida!";
+			JOptionPane.showMessageDialog(ventanaSalaJuego, message, title, JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);
 		}
 		catch (IOException e) {
@@ -347,14 +358,13 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			//procesar turnos
 			while(true) {
 				try {
-					
 					if(ventanaSalaJuego != null) {
-						ventanaSalaJuego.actualizarPanelesJugadores();
+//						ventanaSalaJuego.actualizarPanelesJugadores();
 						fluidClient();
 					}
-					
-					fluidClient();
-					
+					else {
+						fluidClient();						
+					}
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -391,9 +401,19 @@ public class ClienteBlackJack extends JFrame implements Runnable{
             ventanaSalaJuego.pintarTurno(datosRecibidos);
         }
         catch(SocketException e) {
+        	musicManager.stopBackgroundMusic();
+        	musicManager.playMusic(3);
+			String title = "Hasta Pronto!";
+			String message = "Uno o varios jugadores decidieron abandonar la partida!";
+			JOptionPane.showMessageDialog(ventanaSalaJuego, message, title, JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
         catch(IOException e) {
+        	musicManager.stopBackgroundMusic();
+        	musicManager.playMusic(3);
+			String title = "Hasta Pronto!";
+			String message = "Uno o varios jugadores decidieron abandonar la partida!";
+			JOptionPane.showMessageDialog(ventanaSalaJuego, message, title, JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
 
@@ -410,6 +430,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				musicManager.startBackgroundMusic();
 				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
 				ventanaSalaJuego = new VentanaSalaJuego(idYo, otroJugador, otroJugador2, apuestaYo, apuestaOtroJugador, apuestaOtroJugador2);

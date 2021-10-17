@@ -31,6 +31,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import comunes.DatosBlackJack;
+import comunes.MusicManager;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,6 +52,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada, finDeRonda;
 	private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 	private Escucha escucha;
+	private MusicManager musicManager;	
 
 	/**
 	 * Instantiates a new ventana sala juego. Constructor de la clase.
@@ -74,7 +76,8 @@ public class VentanaSalaJuego extends JInternalFrame {
 		this.modificarApuesta = false;
 		this.pantallaApuestasDesplegada = false;
 		this.finDeRonda = false;
-
+		this.musicManager = new MusicManager();
+		
 		initGUI();
 
 		// default window settings
@@ -298,7 +301,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	public void pintarTurno(DatosBlackJack datosRecibidos) {
 		areaMensajes.append(datosRecibidos.getMensaje() + "\n");
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();
-		actualizarPanelesJugadores();
+//		actualizarPanelesJugadores();
 
 		if (datosRecibidos.getReiniciar() == true) {
 			restart();
@@ -390,8 +393,8 @@ public class VentanaSalaJuego extends JInternalFrame {
 		bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
 		bordes.setTitleColor(Color.WHITE);
 		jugador3.setBorder(bordes);
-		this.repaint();
-		this.validate();
+//		this.repaint();
+//		this.validate();
 	}
 
 	/**
@@ -417,8 +420,10 @@ public class VentanaSalaJuego extends JInternalFrame {
 		String title = "Valor final!";
 		String message = "";
 		if (valor > 0) {
+			musicManager.playMusic(1);
 			message = String.format("El dealer te pagará %s USD!", valor);
 		} else {
+			musicManager.playMusic(2);
 			message = String.format("Has perdido la apuesta, ahora tienes %s USD!", valor);
 		}
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
@@ -497,10 +502,10 @@ public class VentanaSalaJuego extends JInternalFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 			// TODO Auto-generated method stub
 			if (actionEvent.getSource() == pedir) {
-				System.out.println("Aaaaaa!");
+				musicManager.playMusic(0);
 				enviarDatos("pedir");
 			} else {
-				System.out.println("SIUUUU!");
+				musicManager.playMusic(4);
 				enviarDatos("plantar");
 				activarBotones(false);
 			}

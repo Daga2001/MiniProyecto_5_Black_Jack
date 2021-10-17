@@ -107,7 +107,7 @@ public class PanelJugador extends JPanel {
 	 */
 	public void limpiar() {
 		dibujoRecordar = new ArrayList<Recuerdo>(); 
-		this.revalidate();
+		repaint();  
 	}
 
 	/**
