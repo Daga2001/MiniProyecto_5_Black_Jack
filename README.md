@@ -86,3 +86,7 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 ## Update 1.7
 
 - El código esta documentado
+
+## Update 1.8
+
+- Se agregó musica y efectos de sonido al juego, corrigiendo algunos errores gráficos.
