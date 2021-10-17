@@ -27,7 +27,7 @@ public class MusicManager {
 	private AudioInputStream audioIn;
 	
 	/** The background music. */
-	private Clip cardFlip, earnedCash, lostCash, goodBye, bell, backgroundMusic;
+	private Clip cardFlip, earnedCash, lostCash, goodBye, bell, shoowsh, backgroundMusic;
 	
 	/** The sounds. */
 	private ArrayList<Clip> sounds;
@@ -42,30 +42,37 @@ public class MusicManager {
 		//Import Audio
 		
 		try {
+			
+			//----------------------------------------------1-------------------------------------------------------------
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("cardFlip.wav"));
 			cardFlip = AudioSystem.getClip();
 			cardFlip.open(audioIn);
 			sounds.add(cardFlip);
-			
+			//----------------------------------------------2-------------------------------------------------------------
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("earnedMoney.wav"));
 			earnedCash = AudioSystem.getClip();
 			earnedCash.open(audioIn);
 			sounds.add(earnedCash);
-			
+			//----------------------------------------------3-------------------------------------------------------------
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("fail.wav"));
 			lostCash = AudioSystem.getClip();
 			lostCash.open(audioIn);
 			sounds.add(lostCash);
-			
+			//----------------------------------------------4-------------------------------------------------------------
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("goodBye.wav"));
 			goodBye = AudioSystem.getClip();
 			goodBye.open(audioIn);
 			sounds.add(goodBye);
-			
+			//----------------------------------------------5-------------------------------------------------------------
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("bell.wav"));
 			bell = AudioSystem.getClip();
 			bell.open(audioIn);
 			sounds.add(bell);
+			//----------------------------------------------6-------------------------------------------------------------
+			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("Wind-Shoowsh.wav"));
+			shoowsh = AudioSystem.getClip();
+			shoowsh.open(audioIn);
+			sounds.add(shoowsh);
 			
 			audioIn = AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource("pokerMusic.wav"));
 			backgroundMusic = AudioSystem.getClip();

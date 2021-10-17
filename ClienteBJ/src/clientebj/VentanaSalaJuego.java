@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +19,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,6 +39,11 @@ import comunes.MusicManager;
  */
 public class VentanaSalaJuego extends JInternalFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private PanelJugador dealer, yo, jugador2, jugador3;
 	private JTextArea areaMensajes;
 	private JButton pedir, plantar;
@@ -49,7 +52,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	private PanelWithImage background;
 	private ImageIcon image;
 	private String yoId, jugador2Id, jugador3Id;
-	private volatile boolean cerrarConexion, modificarApuesta, pantallaApuestasDesplegada, finDeRonda;
+	private volatile boolean cerrarConexion, pantallaApuestasDesplegada;
 	private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 	private Escucha escucha;
 	private MusicManager musicManager;	
@@ -73,9 +76,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 		this.apuestaOtroJugador = apuestaOtroJugador;
 		this.apuestaOtroJugador2 = apuestaOtroJugador2;
 		this.cerrarConexion = false;
-		this.modificarApuesta = false;
 		this.pantallaApuestasDesplegada = false;
-		this.finDeRonda = false;
 		this.musicManager = new MusicManager();
 		
 		initGUI();
@@ -301,7 +302,6 @@ public class VentanaSalaJuego extends JInternalFrame {
 	public void pintarTurno(DatosBlackJack datosRecibidos) {
 		areaMensajes.append(datosRecibidos.getMensaje() + "\n");
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();
-//		actualizarPanelesJugadores();
 
 		if (datosRecibidos.getReiniciar() == true) {
 			restart();
@@ -310,7 +310,15 @@ public class VentanaSalaJuego extends JInternalFrame {
 			limpiar();
 			pintarCartasReinicio(datosRecibidos);
 		}
-
+		
+		if(datosRecibidos.getJugadorEstado().equals("plantó")) {
+			musicManager.playMusic(4);
+		}
+		
+		if(datosRecibidos.getJugadorEstado().equals("voló")) {
+			musicManager.playMusic(5);
+		}
+		
 		if (datosRecibidos.getJugador().contentEquals(yoId)) {
 			if (datosRecibidos.getJugadorEstado().equals("iniciar")) {
 				activarBotones(true);
@@ -360,9 +368,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	 * pantallaApuestasDesplegada y finDeRonda.
 	 */
 	public void restart() {
-		this.modificarApuesta = false;
 		this.pantallaApuestasDesplegada = false;
-		this.finDeRonda = false;
 	}
 
 	/**
@@ -374,27 +380,6 @@ public class VentanaSalaJuego extends JInternalFrame {
 		// TODO Auto-generated method stub
 		ClienteBlackJack cliente = (ClienteBlackJack) this.getTopLevelAncestor();
 		cliente.enviarMensajeServidor(mensaje);
-	}
-
-	/**
-	 * Actualizar paneles jugadores. Actualiza los paneles de los jugadores.
-	 */
-	public void actualizarPanelesJugadores() {
-		// panel jugador 1
-		TitledBorder bordes;
-		bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", yoId, apuestaYo));
-		bordes.setTitleColor(Color.WHITE);
-		yo.setBorder(bordes);
-		// panel jugador 2
-		bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador2Id, apuestaOtroJugador));
-		bordes.setTitleColor(Color.WHITE);
-		jugador2.setBorder(bordes);
-		// panel jugador 3
-		bordes = BorderFactory.createTitledBorder(String.format("%s - apuesta: %s", jugador3Id, apuestaOtroJugador2));
-		bordes.setTitleColor(Color.WHITE);
-		jugador3.setBorder(bordes);
-//		this.repaint();
-//		this.validate();
 	}
 
 	/**
@@ -469,7 +454,6 @@ public class VentanaSalaJuego extends JInternalFrame {
 	 */
 	private void checkIfRoundIsOver(String dealerStatus, DatosBlackJack datosRecibidos, ClienteBlackJack cliente) {
 		if ((dealerStatus.equals("voló") || dealerStatus.equals("plantó")) && !pantallaApuestasDesplegada) {
-			this.finDeRonda = true;
 			pantallaApuestasDesplegada = true;
 			// Ventana de aviso del valor final de la apuesta
 			showFinalBet(cliente);

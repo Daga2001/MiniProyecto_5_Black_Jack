@@ -7,18 +7,13 @@
  */
 package clientebj;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -33,6 +28,10 @@ import comunes.Carta;
  */
 public class PanelJugador extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//constantes de clase
 	private static final int ANCHO = 206;
 	private static final int ALTO = 89;
@@ -82,7 +81,7 @@ public class PanelJugador extends JPanel {
 	 */
 	public void pintarLaCarta (Carta carta) {
 		dibujoRecordar.add(new Recuerdo(carta,x));
-		x+=27;
+		x+=15;
 		repaint();
 	}
 	
@@ -107,7 +106,7 @@ public class PanelJugador extends JPanel {
 	 */
 	public void limpiar() {
 		dibujoRecordar = new ArrayList<Recuerdo>(); 
-		repaint();  
+//		repaint();  
 	}
 
 	/**
@@ -136,7 +135,7 @@ public class PanelJugador extends JPanel {
 			image = new ImageIcon(image.getImage().getScaledInstance(sizeX, sizeY, Image.SCALE_DEFAULT));
 			g.drawImage(image.getImage(), x , y, image.getImageObserver());
 		}
-		this.revalidate();	
+			
 	}
 	
 	/**

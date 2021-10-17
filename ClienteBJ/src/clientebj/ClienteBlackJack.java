@@ -7,14 +7,8 @@
  */
 package clientebj;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,25 +17,14 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-
 import comunes.DatosBlackJack;
 import comunes.MusicManager;
 
@@ -51,6 +34,11 @@ import comunes.MusicManager;
  * Esta clase se encarga de representar al cliente.
  */
 public class ClienteBlackJack extends JFrame implements Runnable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	public static final int WIDTH=670;
 	public static final int HEIGHT=440;
@@ -62,18 +50,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	//variables de control del juego
 	private String idYo, otroJugador, otroJugador2;
 	private boolean turno;
-	private int numeroJugadores, valorGanancias;
+	private int valorGanancias;
 	private double apuestaYo, apuestaOtroJugador, apuestaOtroJugador2;
 	private DatosBlackJack datosRecibidos;
-	private double[] nuevasApuestas;
-	private String[] idJugadores;
 	
 	//control de música
 	private MusicManager musicManager;
 	
 	//variables de control de hilos
 	private Lock locker;
-	private Condition threadsManager;
 	
 	//variables para manejar la conexión con el Servidor BlackJack
 	private Socket conexion;
@@ -82,7 +67,6 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 
 	//Componentes Graficos
 	private JDesktopPane containerInternalFrames;
-	private VentanaEntrada ventanaEntrada;
 	private VentanaEspera ventanaEspera;
 	private VentanaSalaJuego ventanaSalaJuego;
 	
@@ -118,7 +102,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		
 		//Create threads-handler variables
 		locker = new ReentrantLock();
-		threadsManager = locker.newCondition();
+		locker.newCondition();
 		
 		//Set up JComponents
 	
@@ -210,7 +194,6 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	private void ajustarDatosJugador() throws ClassNotFoundException, IOException {
 		datosRecibidos = new DatosBlackJack();
 		datosRecibidos = (DatosBlackJack) in.readObject();
-		numeroJugadores = datosRecibidos.getIdJugadores().length;
 		if(datosRecibidos.getIdJugadores()[0].equals(idYo)) {
 			if (datosRecibidos.getIdJugadores()[1].equals(otroJugador)) {
 				idYo = datosRecibidos.getIdJugadores()[0];
@@ -359,7 +342,6 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			while(true) {
 				try {
 					if(ventanaSalaJuego != null) {
-//						ventanaSalaJuego.actualizarPanelesJugadores();
 						fluidClient();
 					}
 					else {
@@ -385,13 +367,6 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	 */
 	private void fluidClient() throws ClassNotFoundException, IOException {
         try {
-            this.setContentPane(containerInternalFrames);
-            containerInternalFrames.repaint();
-            containerInternalFrames.revalidate();
-            this.repaint();
-            this.revalidate();
-
-            mostrarMensajes("Beginning!");
             datosRecibidos = new DatosBlackJack();
             datosRecibidos = (DatosBlackJack)in.readObject();
 

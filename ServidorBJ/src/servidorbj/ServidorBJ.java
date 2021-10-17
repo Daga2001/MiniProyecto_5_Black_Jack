@@ -14,9 +14,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
@@ -47,7 +44,7 @@ public class ServidorBJ implements Runnable{
 	// variables para manejo de hilos
 	private ExecutorService manejadorHilos;											// Ejecutor de threas
 	private Lock bloqueoJuego;														// Sincronizador de threas
-	private Condition esperarInicio, esperarTurno, finalizar;						// Condiciones de sincronizacion
+	private Condition esperarInicio, esperarTurno;									// Condiciones de sincronizacion
 	private Jugador[] jugadores;													// Jugadores
 
 	// variables de control del juego
@@ -94,7 +91,7 @@ public class ServidorBJ implements Runnable{
 		bloqueoJuego = new ReentrantLock();
 		esperarInicio = bloqueoJuego.newCondition();
 		esperarTurno = bloqueoJuego.newCondition();
-		finalizar = bloqueoJuego.newCondition();
+		bloqueoJuego.newCondition();
 		jugadores = new Jugador[LONGITUD_COLA];	
 	}
 
@@ -229,15 +226,6 @@ public class ServidorBJ implements Runnable{
      */
     private boolean seTerminoRonda() {
        return this.finDeRonda;	
-    }
-    
-    /**
-     * Sets the termino ronda.
-     * Cambia el estado de la ronda, termina la ronda o no
-     * @param answer the new termino ronda
-     */
-    private void setTerminoRonda(boolean answer) {
-    	this.finDeRonda = answer;
     }
     
     /**
@@ -489,8 +477,6 @@ public class ServidorBJ implements Runnable{
      */
     private class Jugador implements Runnable{
        
-	    //varibles para gestionar la comunicación con el cliente (Jugador) conectado
-        private Socket conexionCliente;							// Conexion con el cliente
 	    private ObjectOutputStream out;							// Flujo de entrada
 	    private ObjectInputStream in;							// Flujo de salida
 	    private String entrada;									// Mensaje entrante
@@ -506,7 +492,6 @@ public class ServidorBJ implements Runnable{
 		 * @param indexJugador the index jugador
 		 */
 		public Jugador(Socket conexionCliente, int indexJugador) {
-			this.conexionCliente = conexionCliente;
 			this.indexJugador = indexJugador;
 			suspendido = true;
 			//crear los flujos de E/S
@@ -526,36 +511,6 @@ public class ServidorBJ implements Runnable{
 		 */
 		private void setSuspendido(boolean suspendido) {
 			this.suspendido = suspendido;
-		}
-		
-		/**
-		 * Asignar valor apuesta.
-		 * Asigna el valor de la apuesta de jugador
-		 * @param valorNuevo the valor nuevo
-		 * @param idJugador the id jugador
-		 */
-		private void asignarValorApuesta(double valorNuevo, String idJugador) {
-			mostrarMensaje(String.format("nuevaApuesta: %s, idJugador: %s", valorNuevo, idJugador));
-			for(int i = 0; i < valorApuestas.length; i++) {
-				if(idJugadores[i].equals(idJugador) ) {
-					mostrarMensaje(String.format("valorApuestas[%s] antes: %s", i, valorApuestas[i]));
-					valorApuestas[i] = valorNuevo;
-					mostrarMensaje(String.format("valorApuestas[%s] ahora: %s", i, valorApuestas[i]));
-				}
-			}
-		}
-		
-		/**
-		 * Wait.
-		 * Detine este jugador por un tiempo
-		 * @param miliseconds the miliseconds
-		 */
-		private void wait(int miliseconds) {
-			try {
-				Thread.sleep(miliseconds);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
 		
 		/**
@@ -911,8 +866,6 @@ public class ServidorBJ implements Runnable{
      */
 	public void run() {
 		mostrarMensaje("Incia el dealer ...");
-        boolean pedir = true;
-        
         while(!dealerTermina) {
 		  	Carta carta = mazo.getCarta();
 			//adicionar la carta a la mano del dealer
@@ -933,13 +886,11 @@ public class ServidorBJ implements Runnable{
 				if(valorManos[LONGITUD_COLA]>21) {
 					datosEnviar.setJugadorEstado("voló");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[LONGITUD_COLA]+" voló :(");
-					pedir=false;
 					mostrarMensaje("El dealer voló");
 					dealerTermina = true;
 				}else {
 					datosEnviar.setJugadorEstado("plantó");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[LONGITUD_COLA]+" plantó");
-					pedir=false;
 					mostrarMensaje("El dealer plantó");
 					dealerTermina = true;
 				}
