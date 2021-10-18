@@ -64,24 +64,42 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 - Se han añadido graficos al juego, ahora las cartas no son textos (Strings), sino imagenes.
 
+![App Screenshot](https://iili.io/5C7KCl.md.png)
+
 ## Update 1.3
 
 - Ahora se han implementado apuestas en el juego.
 - Cada jugador puede apostar cuanto quiera al iniciar el juego.
+
+![App Screenshot](https://iili.io/5C5Yes.md.png)
 
 ## Update 1.4
 
 - Se mejoraron los graficos de la mesa de juego.
 - La mesa tiene una imagen de fondo, y cada panel de los jugadores tiene un fondo semitransparente
 
+![App Screenshot](https://iili.io/5C5M1S.md.png)
+
 ## Update 1.5
 
 - El juego ya es capaz de calcular las ganancias o perdidas de los jugadores.
+
+- **caso en que se pierde:**
+![App Screenshot](https://iili.io/5C5jku.md.png)
+
+- **caso en que se gana:**
+![App Screenshot](https://iili.io/5C5r21.md.png)
 
 ## Update 1.6
 
 - El juego se reinicia y muestra las nuevas cartas
 - También, si un jugador decide no seguir jugando al final de una ronda, el servidor y los clientes se cierran
+
+- **solicitud de reinicio de ronda:**
+![App Screenshot](https://iili.io/5C5Ppa.md.png)
+
+- **servidor cerrandose con los jugadores (clientes):**
+![App Screenshot](https://iili.io/5C5tBp.md.png)
 
 ## Update 1.7
 
