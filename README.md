@@ -115,4 +115,4 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 ## Final result
 
-![Sample gif](https://s8.gifyu.com/images/min5.gif)
+![miniproject 5](https://user-images.githubusercontent.com/62605744/137669380-e1d7d168-a5a2-4a45-8076-1a8bf5092500.gif)
