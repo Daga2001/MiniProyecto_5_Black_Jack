@@ -113,6 +113,6 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 - Se agregó musica y efectos de sonido al juego, corrigiendo algunos errores gráficos.
 
-## Final Result:
+## Final result
 
-![App Screenshot](https://s7.gifyu.com/images/miniproject_5.gif)
+![Sample gif](https://s8.gifyu.com/images/min5.gif)
