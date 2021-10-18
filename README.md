@@ -84,10 +84,12 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 
 - El juego ya es capaz de calcular las ganancias o perdidas de los jugadores.
 
-- **caso en que se pierde:**
+### caso en que se pierde:
+
 ![App Screenshot](https://iili.io/5C5jku.md.png)
 
-- **caso en que se gana:**
+### caso en que se gana:
+
 ![App Screenshot](https://iili.io/5C5r21.md.png)
 
 ## Update 1.6
@@ -95,10 +97,12 @@ Iniciar nueva ronda de juego (consiste en repartir nuevas cartas y reinciar el o
 - El juego se reinicia y muestra las nuevas cartas
 - También, si un jugador decide no seguir jugando al final de una ronda, el servidor y los clientes se cierran
 
-- **solicitud de reinicio de ronda:**
+### solicitud de reinicio de ronda:
+
 ![App Screenshot](https://iili.io/5C5Ppa.md.png)
 
-- **servidor cerrandose con los jugadores (clientes):**
+### servidor cerrandose con los jugadores (clientes):
+
 ![App Screenshot](https://iili.io/5C5tBp.md.png)
 
 ## Update 1.7
